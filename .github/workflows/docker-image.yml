@@ -12,12 +12,6 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    env:
-      DB_IP: ${{ secrets.DB_IP }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -42,6 +36,11 @@ jobs:
         
       - name: Build JAR file
         run: ./gradlew build
+        env:
+          DB_IP: ${{ secrets.DB_IP }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
