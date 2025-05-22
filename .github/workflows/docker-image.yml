@@ -69,5 +69,13 @@ jobs:
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker stop vita-backend || true
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker rm vita-backend || true
-            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker run -d -v /home/ubuntu/images:/vita-backend/images --name vita-backend -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker run -d \
+              -v /home/ubuntu/images:/vita-backend/images \
+              -e DB_IP=${{ secrets.DB_IP }} \
+              -e DB_PORT=${{ secrets.DB_PORT }} \
+              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              --name vita-backend \
+              -p 8000:8000 \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker system prune -af
