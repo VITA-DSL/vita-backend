@@ -12,7 +12,12 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
-
+    env:
+      DB-IP: ${{ secrets.DB_IP }}
+      DB-PORT: ${{ secrets.DB_PORT }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
