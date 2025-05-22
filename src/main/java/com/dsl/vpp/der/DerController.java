@@ -4,6 +4,7 @@ import com.dsl.vpp.der.dto.request.DerCreateRequestDto;
 import com.dsl.vpp.der.dto.response.DerReadListResponseDto;
 import com.dsl.vpp.der.dto.response.DerReadResponseDto;
 import com.dsl.vpp.der.service.DerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class DerController {
     }
 
     @PostMapping("/ders")
-    ResponseEntity<String> create(@RequestBody DerCreateRequestDto createRequestDto) {
+    ResponseEntity<String> create(@Valid @RequestBody DerCreateRequestDto createRequestDto) {
         return ResponseEntity.ok().body(derService.create(DerMapper.mapToValue(createRequestDto)));
     }
 

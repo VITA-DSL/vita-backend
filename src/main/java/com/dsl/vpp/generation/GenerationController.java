@@ -3,6 +3,7 @@ package com.dsl.vpp.generation;
 import com.dsl.vpp.generation.dto.request.GenerationCreateRequestDto;
 import com.dsl.vpp.generation.dto.response.GenerationReadListResponseDto;
 import com.dsl.vpp.generation.service.GenerationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class GenerationController {
     }
 
     @PostMapping("/gens")
-    ResponseEntity<String> create(GenerationCreateRequestDto createRequest) {
+    ResponseEntity<String> create(@Valid @RequestBody GenerationCreateRequestDto createRequest) {
         return ResponseEntity.ok().body(generationService.create(GenerationMapper.mapToValue(createRequest)));
     }
     @GetMapping("/gens")
@@ -31,7 +32,7 @@ public class GenerationController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
             ) {
         if (derId != null && vppId != null) {
-            throw new IllegalArgumentException("derId와 vppId 중에 하나만 사용해야 합니다.");
+            throw new IllegalArgumentException("derId와 vppId 중에 하나만 입력해야 합니다.");
         }
 
         if (derId != null) {

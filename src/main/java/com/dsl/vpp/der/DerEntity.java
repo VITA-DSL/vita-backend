@@ -2,22 +2,29 @@ package com.dsl.vpp.der;
 
 import com.dsl.vpp.vpp.core.VppEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Table(name="der")
-@Entity
-@Data
+import java.util.UUID;
+
+@Entity(name="der")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 public class DerEntity {
     @Id
-    @GeneratedValue
     String id;
     Double capacity;
     @ManyToOne
     @JoinColumn(name="vppId")
     VppEntity vpp;
 
+    @PrePersist
+    public void assignId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
     public void register(VppEntity vpp) {
         this.vpp = vpp;
     }

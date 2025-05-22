@@ -3,12 +3,12 @@ package com.dsl.vpp.vpp.core;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Table(name="vpp")
-@Entity
-@Data
+@Entity(name="vpp")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 public class VppEntity {
     @Id

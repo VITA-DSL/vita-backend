@@ -6,6 +6,7 @@ import com.dsl.vpp.vpp.core.dto.request.VppCreateRequestDto;
 import com.dsl.vpp.vpp.core.dto.response.VppReadListResponseDto;
 import com.dsl.vpp.vpp.core.dto.response.VppReadResponseDto;
 import com.dsl.vpp.vpp.core.service.VppService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class VppController {
     }
 
     @PostMapping("/vpps")
-    ResponseEntity<String> create(@RequestBody VppCreateRequestDto vppCreateRequest) {
+    ResponseEntity<String> create(@Valid @RequestBody VppCreateRequestDto vppCreateRequest) {
         return ResponseEntity.ok().body(vppService.create(VppMapper.mapToValue(vppCreateRequest)));
     }
     @GetMapping("/vpps/{id}")

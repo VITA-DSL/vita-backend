@@ -2,14 +2,15 @@ package com.dsl.vpp.generation;
 
 import com.dsl.vpp.der.DerEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Table(name = "generation")
-@Entity
-@Data
+@Entity(name = "generation")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 public class GenerationEntity {
     @Id
@@ -20,4 +21,11 @@ public class GenerationEntity {
     @ManyToOne
     @JoinColumn(name="derId")
     DerEntity der;
+
+    @PrePersist
+    public void assignId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }
