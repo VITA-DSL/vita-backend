@@ -26,13 +26,21 @@ public class VppController {
     ResponseEntity<String> create(@Valid @RequestBody VppCreateRequestDto vppCreateRequest) {
         return ResponseEntity.ok().body(vppService.create(VppMapper.mapToValue(vppCreateRequest)));
     }
+
+    @GetMapping("/vpps")
+    ResponseEntity<VppReadListResponseDto> read() {
+        return ResponseEntity.ok().body(VppMapper.mapToDto(vppService.readAll()));
+    }
+
     @GetMapping("/vpps/{id}")
     ResponseEntity<VppReadResponseDto> read(@PathVariable String id) {
         return ResponseEntity.ok().body(VppMapper.mapToDto(vppService.readById(id)));
     }
-    @GetMapping("/vpps")
-    ResponseEntity<VppReadListResponseDto> read() {
-        return ResponseEntity.ok().body(VppMapper.mapToDto(vppService.readAll()));
+
+    @DeleteMapping("/vpps/{id}")
+    ResponseEntity<Void> delete(@PathVariable String id) {
+        vppService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/vpps/{id}/ders/{derId}")

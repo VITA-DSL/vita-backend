@@ -24,17 +24,17 @@ public class DerController {
     }
 
     @GetMapping("/ders")
-    ResponseEntity<DerReadListResponseDto> read() {
+    ResponseEntity<DerReadListResponseDto> getAll() {
         return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readAll()));
     }
 
     @GetMapping("/ders/{id}")
-    ResponseEntity<DerReadResponseDto> read(@PathVariable String id) {
+    ResponseEntity<DerReadResponseDto> get(@PathVariable String id) {
         return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readById(id)));
     }
 
     @GetMapping("/vpps/{vppId}/ders")
-    ResponseEntity<DerReadListResponseDto> readByVppId(@PathVariable String vppId) {
+    ResponseEntity<DerReadListResponseDto> getByVppId(@PathVariable String vppId) {
         return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readByVppId(vppId)));
     }
 

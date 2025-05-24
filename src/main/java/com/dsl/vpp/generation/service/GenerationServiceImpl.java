@@ -27,13 +27,6 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public List<GenerationInfo> readBetween(LocalDate start, LocalDate end) {
-        return GenerationMapper.mapToValue(
-                generationRepository.findByDateTimeBetween(start.atStartOfDay(), end.atTime(23,59,59))
-        );
-    }
-
-    @Override
     public List<GenerationInfo> readByDerBetween(String derId, LocalDate start, LocalDate end) {
         return GenerationMapper.mapToValue(
                 generationRepository.findByDerIdAndDateTimeBetween(
@@ -47,7 +40,9 @@ public class GenerationServiceImpl implements GenerationService {
     @Override
     public List<GenerationInfo> readByVppBetween(String vppId, LocalDate start, LocalDate end) {
         return derService.readByVppId(vppId).stream()
-                .flatMap(derInfo -> readByDerBetween(derInfo.getId(), start, end).stream())
+                .flatMap(
+                        derInfo -> readByDerBetween(derInfo.getId(), start, end).stream()
+                )
                 .collect(Collectors.toList());
     }
 }

@@ -20,27 +20,26 @@ public class GenerationController {
         this.generationService = generationService;
     }
 
-    @PostMapping("/gens")
-    ResponseEntity<String> create(@Valid @RequestBody GenerationCreateRequestDto createRequest) {
-        return ResponseEntity.ok().body(generationService.create(GenerationMapper.mapToValue(createRequest)));
+    @PostMapping("/ders/{id}/gens")
+    ResponseEntity<String> create(@PathVariable String id, @Valid @RequestBody GenerationCreateRequestDto createRequestDto) {
+        return ResponseEntity.ok().body(generationService.create(GenerationMapper.mapToValue(id, createRequestDto)));
     }
-    @GetMapping("/gens")
-    ResponseEntity<GenerationReadListResponseDto> read(
-            @RequestParam(required = false) String derId,
-            @RequestParam(required = false) String vppId,
+
+    @GetMapping("/ders/{id}/gens")
+    ResponseEntity<GenerationReadListResponseDto> getGenerationListByDerBetween(
+            @PathVariable String id,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
             ) {
-        if (derId != null && vppId != null) {
-            throw new IllegalArgumentException("derId와 vppId 중에 하나만 입력해야 합니다.");
-        }
 
-        if (derId != null) {
-            return ResponseEntity.ok().body(GenerationMapper.mapToDto(generationService.readByDerBetween(derId, start, end)));
-        }
-        if (vppId != null) {
-            return ResponseEntity.ok().body(GenerationMapper.mapToDto(generationService.readByVppBetween(vppId, start, end)));
-        }
-        return ResponseEntity.ok().body(GenerationMapper.mapToDto(generationService.readBetween(start, end)));
+        return ResponseEntity.ok().body(GenerationMapper.mapToDto(generationService.readByDerBetween(id, start, end)));
+    }
+    @GetMapping("/vpps/{id}/gens")
+    ResponseEntity<GenerationReadListResponseDto> getGenerationListByVppBetween(
+            @PathVariable String id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        return ResponseEntity.ok().body(GenerationMapper.mapToDto(generationService.readByVppBetween(id, start, end)));
     }
 }

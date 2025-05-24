@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GenerationMapper {
-    public static GenerationInfo mapToValue(GenerationCreateRequestDto generation) {
+    public static GenerationInfo mapToValue(String derId, GenerationCreateRequestDto createRequestDto) {
         return GenerationInfo.builder()
-                .derId(generation.getDerId())
-                .amount(generation.getAmount())
-                .dateTime(generation.getDateTime())
+                .derId(derId)
+                .amount(createRequestDto.getAmount())
+                .dateTime(createRequestDto.getDateTime())
                 .build();
     }
     public static GenerationInfo mapToValue(GenerationEntity generation) {

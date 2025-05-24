@@ -19,7 +19,7 @@ public class DerMapper {
     public static DerInfo mapToValue(DerEntity der) {
         return DerInfo.builder()
                 .id(der.getId())
-                .vppId(der.getVpp().getId())
+                .vppId(der.getVpp() != null ? der.getVpp().getId() : null)
                 .capacity(der.getCapacity())
                 .build();
     }
