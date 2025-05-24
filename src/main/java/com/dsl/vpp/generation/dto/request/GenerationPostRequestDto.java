@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 public class GenerationPostRequestDto {
+    String predictionId;
     @NotNull(message = "amount 는 필수 입력 값입니다.")
     Double amount;
     @NotNull(message = "dateTime 은 필수 입력 값입니다. 예시: 2025-05-22T12:00:00Z")

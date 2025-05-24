@@ -26,12 +26,12 @@ public class GenerationController {
     }
 
     @GetMapping("/ders/{derId}/generations")
-    public ResponseEntity<GenerationGetListResponseDto> getGenerationListByDerBetween(
+    public ResponseEntity<GenerationGetListResponseDto> getGenerationListByDerBetween( // 차후에 Between은 조건 쿼리로 변경 예정
             @PathVariable String derId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<GenerationInfo> generationInfos = generationService.readByDerBetween(derId, start, end);
+        List<GenerationInfo> generationInfos = generationService.readByDerIdBetween(derId, start, end);
         GenerationGetListResponseDto responseDto = GenerationMapper.mapToDto(generationInfos);
         return ResponseEntity.ok(responseDto);
     }
@@ -42,7 +42,7 @@ public class GenerationController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<GenerationInfo> generationInfos = generationService.readByVppBetween(vppId, start, end);
+        List<GenerationInfo> generationInfos = generationService.readByVppIdBetween(vppId, start, end);
         GenerationGetListResponseDto responseDto = GenerationMapper.mapToDto(generationInfos);
         return ResponseEntity.ok(responseDto);
     }

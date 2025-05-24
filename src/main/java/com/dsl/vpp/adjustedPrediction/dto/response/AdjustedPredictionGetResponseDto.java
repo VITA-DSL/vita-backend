@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class AdjustedPredictionGetResponseDto {
     String id;
     String derId;
+    String predictionId;
     Double amount;
     LocalDateTime dateTime;
 }

@@ -28,6 +28,13 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
     @Override
+    public PredictionInfo read(String id) {
+        PredictionEntity predictionEntity = predictionRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 예측 데이터입니다."));
+        return PredictionMapper.mapToValue(predictionEntity);
+    }
+
+    @Override
     public List<PredictionInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end) {
         List<PredictionEntity> predictionEntityList = predictionRepository.findByDerIdAndDateTimeBetween(derId, start, end);
         return PredictionMapper.mapToValue(predictionEntityList);

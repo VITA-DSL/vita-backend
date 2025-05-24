@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface GenerationService {
     String create(GenerationInfo generation);
-    List<GenerationInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end);
-    List<GenerationInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end);
+    GenerationInfo read(String id);
+    List<GenerationInfo> readByDerId(String derId);
+    List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
+    List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
 }

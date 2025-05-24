@@ -46,7 +46,7 @@ public class PredictionMapper {
                 .build();
     }
 
-    private static PredictionInfo mapToValue(PredictionEntity predictionEntity) {
+    public static PredictionInfo mapToValue(PredictionEntity predictionEntity) {
         return PredictionInfo.builder()
                 .id(predictionEntity.getId())
                 .derId(predictionEntity.getDerId())

@@ -18,9 +18,9 @@ import java.util.List;
 public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
-    @PostMapping("/ders/{derId}/adjusted-predictions")
-    public ResponseEntity<String> create(@PathVariable String derId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
-        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(derId, requestDto);
+    @PostMapping("/ders/{derId}/predictions/{predictionId}/adjusted-predictions")
+    public ResponseEntity<String> create(@PathVariable String derId, @PathVariable String predictionId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
+        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(derId, predictionId, requestDto);
         String generationId = adjustedPredictionService.create(adjustedPredictionInfo);
         return ResponseEntity.ok(generationId);
     }

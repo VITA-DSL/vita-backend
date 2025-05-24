@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface GenerationRepository extends JpaRepository<GenerationEntity, String> {
+    List<GenerationEntity> findByDerId(String derId);
     List<GenerationEntity> findByDerIdAndDateTimeBetween(String derId, LocalDateTime start, LocalDateTime end);
 }

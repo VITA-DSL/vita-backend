@@ -28,15 +28,28 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public List<GenerationInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end) {
+    public GenerationInfo read(String id) {
+        GenerationEntity generationEntity = generationRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 전력 데이터입니다."));
+        return GenerationMapper.mapToValue(generationEntity);
+    }
+
+    @Override
+    public List<GenerationInfo> readByDerId(String derId) {
+        List<GenerationEntity> generationEntityList = generationRepository.findByDerId(derId);
+        return GenerationMapper.mapToValue(generationEntityList);
+    }
+
+    @Override
+    public List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
         List<GenerationEntity> generationEntityList = generationRepository.findByDerIdAndDateTimeBetween(derId,start,end);
         return GenerationMapper.mapToValue(generationEntityList);
     }
 
     @Override
-    public List<GenerationInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+    public List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         return derService.readByVppId(vppId).stream()
-                .flatMap(derInfo -> readByDerBetween(derInfo.getId(), start, end).stream())
+                .flatMap(derInfo -> readByDerIdBetween(derInfo.getId(), start, end).stream())
                 .collect(Collectors.toList());
     }
 }

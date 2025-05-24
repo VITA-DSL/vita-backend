@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class GenerationMapper {
     public static GenerationInfo mapToValue(String derId, GenerationPostRequestDto createRequestDto) {
         return GenerationInfo.builder()
+                .predictionId(createRequestDto.getPredictionId())
                 .derId(derId)
                 .amount(createRequestDto.getAmount())
                 .dateTime(createRequestDto.getDateTime())
@@ -20,7 +21,9 @@ public class GenerationMapper {
     public static GenerationInfo mapToValue(GenerationEntity generation) {
         return GenerationInfo.builder()
                 .id(generation.getId())
+                .predictionId(generation.getPredictionId())
                 .derId(generation.getDerId())
+                .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
                 .build();
     }
@@ -33,6 +36,7 @@ public class GenerationMapper {
 
     public static GenerationEntity mapToEntity(GenerationInfo generation) {
         return GenerationEntity.builder()
+                .predictionId(generation.getPredictionId())
                 .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
@@ -41,6 +45,7 @@ public class GenerationMapper {
     public static GenerationGetResponseDto mapToDto(GenerationInfo generation) {
         return GenerationGetResponseDto.builder()
                 .id(generation.getId())
+                .predictionId(generation.getPredictionId())
                 .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
