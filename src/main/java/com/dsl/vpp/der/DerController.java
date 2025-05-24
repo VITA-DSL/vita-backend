@@ -1,8 +1,8 @@
 package com.dsl.vpp.der;
 
-import com.dsl.vpp.der.dto.request.DerCreateRequestDto;
-import com.dsl.vpp.der.dto.response.DerReadListResponseDto;
-import com.dsl.vpp.der.dto.response.DerReadResponseDto;
+import com.dsl.vpp.der.dto.request.DerPostRequestDto;
+import com.dsl.vpp.der.dto.response.DerGetListResponseDto;
+import com.dsl.vpp.der.dto.response.DerGetResponseDto;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.value.DerInfo;
 import jakarta.validation.Valid;
@@ -18,30 +18,30 @@ public class DerController {
     private final DerService derService;
 
     @PostMapping("/ders")
-    public ResponseEntity<String> post(@Valid @RequestBody DerCreateRequestDto createRequestDto) {
+    public ResponseEntity<String> post(@Valid @RequestBody DerPostRequestDto createRequestDto) {
         DerInfo derInfo = DerMapper.mapToValue(createRequestDto);
         String derId = derService.create(derInfo);
         return ResponseEntity.ok().body(derId);
     }
 
     @GetMapping("/ders")
-    public ResponseEntity<DerReadListResponseDto> getAll() {
+    public ResponseEntity<DerGetListResponseDto> getAll() {
         List<DerInfo> derInfoList = derService.readAll();
-        DerReadListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
+        DerGetListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
         return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("/ders/{id}")
-    public ResponseEntity<DerReadResponseDto> get(@PathVariable String id) {
+    public ResponseEntity<DerGetResponseDto> get(@PathVariable String id) {
         DerInfo derInfo = derService.readById(id);
-        DerReadResponseDto responseDto = DerMapper.mapToDto(derInfo);
+        DerGetResponseDto responseDto = DerMapper.mapToDto(derInfo);
         return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("/vpps/{vppId}/ders")
-    public ResponseEntity<DerReadListResponseDto> getByVppId(@PathVariable String vppId) {
+    public ResponseEntity<DerGetListResponseDto> getByVppId(@PathVariable String vppId) {
         List<DerInfo> derInfoList = derService.readByVppId(vppId);
-        DerReadListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
+        DerGetListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
         return ResponseEntity.ok().body(responseDto);
     }
 

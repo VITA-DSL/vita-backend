@@ -1,6 +1,5 @@
 package com.dsl.vpp.generation;
 
-import com.dsl.vpp.der.DerEntity;
 import com.dsl.vpp.generation.dto.request.GenerationCreateRequestDto;
 import com.dsl.vpp.generation.dto.response.GenerationReadListResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationReadResponseDto;
@@ -21,7 +20,7 @@ public class GenerationMapper {
     public static GenerationInfo mapToValue(GenerationEntity generation) {
         return GenerationInfo.builder()
                 .id(generation.getId())
-                .derId(generation.getDer().getId())
+                .derId(generation.getDerId())
                 .dateTime(generation.getDateTime())
                 .build();
     }
@@ -34,7 +33,7 @@ public class GenerationMapper {
 
     public static GenerationEntity mapToEntity(GenerationInfo generation) {
         return GenerationEntity.builder()
-                .der(DerEntity.builder().id(generation.getDerId()).build())
+                .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .build();
     }

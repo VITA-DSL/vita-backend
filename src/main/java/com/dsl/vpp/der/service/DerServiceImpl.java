@@ -53,8 +53,7 @@ public class DerServiceImpl implements DerService {
         DerEntity der = derRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 DER 아이디입니다."));
 
-        VppEntity vpp = VppEntity.builder().id(vppId).build();
-        der.register(vpp);
+        der.register(vppId);
         derRepository.save(der);
     }
 

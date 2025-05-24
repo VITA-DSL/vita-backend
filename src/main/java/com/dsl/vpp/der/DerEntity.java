@@ -1,6 +1,5 @@
 package com.dsl.vpp.der;
 
-import com.dsl.vpp.vpp.core.VppEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,10 +13,8 @@ import java.util.UUID;
 public class DerEntity {
     @Id
     String id;
+    String vppId; // FK
     Double capacity;
-    @ManyToOne
-    @JoinColumn(name="vppId")
-    VppEntity vpp;
 
     @PrePersist
     public void assignId() {
@@ -25,11 +22,11 @@ public class DerEntity {
             this.id = UUID.randomUUID().toString();
         }
     }
-    public void register(VppEntity vpp) {
-        this.vpp = vpp;
+    public void register(String vppId) {
+        this.vppId = vppId;
     }
     public void unregister() {
-        if(this.vpp == null) throw new IllegalStateException("해당 DER은 소속된 VPP가 없습니다.");
-        this.vpp = null;
+        if(this.vppId == null) throw new IllegalStateException("해당 DER은 소속된 VPP가 없습니다.");
+        this.vppId = null;
     }
 }

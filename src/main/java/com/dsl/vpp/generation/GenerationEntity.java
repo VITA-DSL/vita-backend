@@ -15,12 +15,9 @@ import java.util.UUID;
 public class GenerationEntity {
     @Id
     String id;
+    String derId;
     Double amount;
     LocalDateTime dateTime;
-
-    @ManyToOne
-    @JoinColumn(name="derId")
-    DerEntity der;
 
     @PrePersist
     public void assignId() {

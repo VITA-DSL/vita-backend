@@ -1,12 +1,13 @@
 package com.dsl.vpp.generation.service;
 
 import com.dsl.vpp.der.service.DerService;
+import com.dsl.vpp.generation.GenerationEntity;
 import com.dsl.vpp.generation.GenerationMapper;
 import com.dsl.vpp.generation.GenerationRepository;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,22 +28,15 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public List<GenerationInfo> readByDerBetween(String derId, LocalDate start, LocalDate end) {
-        return GenerationMapper.mapToValue(
-                generationRepository.findByDerIdAndDateTimeBetween(
-                        derId,
-                        start.atStartOfDay(),
-                        end.atTime(23,59,59)
-                )
-        );
+    public List<GenerationInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end) {
+        List<GenerationEntity> generationEntityList = generationRepository.findByDerIdAndDateTimeBetween(derId,start,end);
+        return GenerationMapper.mapToValue(generationEntityList);
     }
 
     @Override
-    public List<GenerationInfo> readByVppBetween(String vppId, LocalDate start, LocalDate end) {
+    public List<GenerationInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         return derService.readByVppId(vppId).stream()
-                .flatMap(
-                        derInfo -> readByDerBetween(derInfo.getId(), start, end).stream()
-                )
+                .flatMap(derInfo -> readByDerBetween(derInfo.getId(), start, end).stream())
                 .collect(Collectors.toList());
     }
 }

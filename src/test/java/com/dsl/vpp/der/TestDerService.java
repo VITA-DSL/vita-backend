@@ -23,7 +23,7 @@ public class TestDerService {
     void setUp() {
         DerEntity derEntity = DerEntity.builder()
                 .id("test")
-                .vpp(VppEntity.builder().id("test").build())
+                .vppId("test")
                 .capacity(300.0)
                 .build();
 
