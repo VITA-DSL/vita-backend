@@ -4,42 +4,49 @@ import com.dsl.vpp.der.dto.request.DerCreateRequestDto;
 import com.dsl.vpp.der.dto.response.DerReadListResponseDto;
 import com.dsl.vpp.der.dto.response.DerReadResponseDto;
 import com.dsl.vpp.der.service.DerService;
+import com.dsl.vpp.der.value.DerInfo;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-public class DerController {
-    DerService derService;
+import java.util.List;
 
-    @Autowired
-    DerController(DerService derService) {
-        this.derService = derService;
-    }
+@RestController
+@RequiredArgsConstructor
+public class DerController {
+    private final DerService derService;
 
     @PostMapping("/ders")
-    ResponseEntity<String> create(@Valid @RequestBody DerCreateRequestDto createRequestDto) {
-        return ResponseEntity.ok().body(derService.create(DerMapper.mapToValue(createRequestDto)));
+    public ResponseEntity<String> post(@Valid @RequestBody DerCreateRequestDto createRequestDto) {
+        DerInfo derInfo = DerMapper.mapToValue(createRequestDto);
+        String derId = derService.create(derInfo);
+        return ResponseEntity.ok().body(derId);
     }
 
     @GetMapping("/ders")
-    ResponseEntity<DerReadListResponseDto> getAll() {
-        return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readAll()));
+    public ResponseEntity<DerReadListResponseDto> getAll() {
+        List<DerInfo> derInfoList = derService.readAll();
+        DerReadListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("/ders/{id}")
-    ResponseEntity<DerReadResponseDto> get(@PathVariable String id) {
-        return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readById(id)));
+    public ResponseEntity<DerReadResponseDto> get(@PathVariable String id) {
+        DerInfo derInfo = derService.readById(id);
+        DerReadResponseDto responseDto = DerMapper.mapToDto(derInfo);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("/vpps/{vppId}/ders")
-    ResponseEntity<DerReadListResponseDto> getByVppId(@PathVariable String vppId) {
-        return ResponseEntity.ok().body(DerMapper.mapToDto(derService.readByVppId(vppId)));
+    public ResponseEntity<DerReadListResponseDto> getByVppId(@PathVariable String vppId) {
+        List<DerInfo> derInfoList = derService.readByVppId(vppId);
+        DerReadListResponseDto responseDto = DerMapper.mapToDto(derInfoList);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @DeleteMapping("/ders/{id}")
-    ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         derService.deleteById(id);
         return ResponseEntity.ok().build();
     }
