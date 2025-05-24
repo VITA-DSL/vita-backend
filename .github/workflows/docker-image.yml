@@ -66,10 +66,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
-            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker stop vita-backend || true
-            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker rm vita-backend || true
-            echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker run -d \
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+            docker stop vita-backend || true
+            docker rm vita-backend || true
+            docker run -d \
               -v /home/ubuntu/images:/vita-backend/images \
               -e DB_IP=${{ secrets.DB_IP }} \
               -e DB_PORT=${{ secrets.DB_PORT }} \
