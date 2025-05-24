@@ -1,4 +1,4 @@
-package com.dsl.vpp.generation;
+package com.dsl.vpp.adjustedPrediction;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,12 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "generation")
+@Entity(name = "adjusted")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
-public class GenerationEntity {
+public class AdjustedPredictionEntity {
     @Id
     String id;
     String derId;
@@ -25,3 +25,4 @@ public class GenerationEntity {
         }
     }
 }
+

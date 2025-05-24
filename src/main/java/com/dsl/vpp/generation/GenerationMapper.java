@@ -1,8 +1,8 @@
 package com.dsl.vpp.generation;
 
-import com.dsl.vpp.generation.dto.request.GenerationCreateRequestDto;
-import com.dsl.vpp.generation.dto.response.GenerationReadListResponseDto;
-import com.dsl.vpp.generation.dto.response.GenerationReadResponseDto;
+import com.dsl.vpp.generation.dto.request.GenerationPostRequestDto;
+import com.dsl.vpp.generation.dto.response.GenerationGetListResponseDto;
+import com.dsl.vpp.generation.dto.response.GenerationGetResponseDto;
 import com.dsl.vpp.generation.value.GenerationInfo;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GenerationMapper {
-    public static GenerationInfo mapToValue(String derId, GenerationCreateRequestDto createRequestDto) {
+    public static GenerationInfo mapToValue(String derId, GenerationPostRequestDto createRequestDto) {
         return GenerationInfo.builder()
                 .derId(derId)
                 .amount(createRequestDto.getAmount())
@@ -35,22 +35,23 @@ public class GenerationMapper {
         return GenerationEntity.builder()
                 .derId(generation.getDerId())
                 .amount(generation.getAmount())
+                .dateTime(generation.getDateTime())
                 .build();
     }
-    public static GenerationReadResponseDto mapToDto(GenerationInfo generation) {
-        return GenerationReadResponseDto.builder()
+    public static GenerationGetResponseDto mapToDto(GenerationInfo generation) {
+        return GenerationGetResponseDto.builder()
                 .id(generation.getId())
                 .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
                 .build();
     }
-    public static GenerationReadListResponseDto mapToDto(List<GenerationInfo> generationInfos) {
-        ArrayList<GenerationReadResponseDto> generations = generationInfos.stream()
+    public static GenerationGetListResponseDto mapToDto(List<GenerationInfo> generationInfos) {
+        ArrayList<GenerationGetResponseDto> generations = generationInfos.stream()
                 .map(GenerationMapper::mapToDto)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return GenerationReadListResponseDto.builder()
+        return GenerationGetListResponseDto.builder()
                 .generations(generations)
                 .build();
     }

@@ -34,4 +34,15 @@ public class PredictionController {
         List<PredictionInfo> predictionInfoList = predictionService.readByDerBetween(derId, start, end);
         return ResponseEntity.ok().body(PredictionMapper.mapToDto(predictionInfoList));
     }
+
+    @GetMapping("/vpps/{vppId}/predictions")
+    public ResponseEntity<PredictionGetListResponseDto> getPredictionListByVppBetween(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
+    ) {
+        List<PredictionInfo> predictionInfoList = predictionService.readByVppBetween(vppId, start, end);
+        PredictionGetListResponseDto responseDto = PredictionMapper.mapToDto(predictionInfoList);
+        return ResponseEntity.ok(responseDto);
+    }
 }

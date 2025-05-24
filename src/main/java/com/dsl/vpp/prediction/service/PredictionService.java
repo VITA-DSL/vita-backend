@@ -8,4 +8,5 @@ import java.util.List;
 public interface PredictionService {
     String create(PredictionInfo predictionInfo);
     List<PredictionInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end);
+    List<PredictionInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end);
 }

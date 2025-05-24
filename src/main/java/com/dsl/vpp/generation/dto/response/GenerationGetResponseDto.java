@@ -1,4 +1,4 @@
-package com.dsl.vpp.generation.value;
+package com.dsl.vpp.generation.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +7,9 @@ import java.time.LocalDateTime;
 
 @Builder
 @Data
-public class GenerationInfo {
+public class GenerationGetResponseDto {
     String id;
     String derId;
     Double amount;
     LocalDateTime dateTime;
-    LocalDateTime settlementTime;
 }

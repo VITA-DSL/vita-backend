@@ -30,7 +30,7 @@ public class TestGenerationService {
     void setUp() {
         GenerationEntity generationEntity = GenerationEntity.builder()
                 .id("test")
-                .der(DerEntity.builder().id("test").build())
+                .derId("test")
                 .amount(300.0)
                 .dateTime(LocalDateTime.now())
                 .build();
