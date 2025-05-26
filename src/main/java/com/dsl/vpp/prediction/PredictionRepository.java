@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PredictionRepository extends JpaRepository<PredictionEntity, String> {
     List<PredictionEntity> findByDerIdAndDateTimeBetween(String derId, LocalDateTime start, LocalDateTime end);
-    List<PredictionEntity> findByDateTimeBetween(LocalDateTime start, LocalDateTime end);
+    List<PredictionEntity> findByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
 }

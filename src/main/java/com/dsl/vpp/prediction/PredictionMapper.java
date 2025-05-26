@@ -27,6 +27,15 @@ public class PredictionMapper {
                 .build();
     }
 
+    public static PredictionInfo mapToValue(PredictionEntity predictionEntity) {
+        return PredictionInfo.builder()
+                .id(predictionEntity.getId())
+                .derId(predictionEntity.getDerId())
+                .amount(predictionEntity.getAmount())
+                .dateTime(predictionEntity.getDateTime())
+                .build();
+    }
+
     public static PredictionGetResponseDto mapToDto(PredictionInfo predictionInfo) {
         return PredictionGetResponseDto.builder()
                 .id(predictionInfo.getId())
@@ -44,20 +53,5 @@ public class PredictionMapper {
         return PredictionGetListResponseDto.builder()
                 .predictions(predictions)
                 .build();
-    }
-
-    public static PredictionInfo mapToValue(PredictionEntity predictionEntity) {
-        return PredictionInfo.builder()
-                .id(predictionEntity.getId())
-                .derId(predictionEntity.getDerId())
-                .amount(predictionEntity.getAmount())
-                .dateTime(predictionEntity.getDateTime())
-                .build();
-    }
-
-    public static List<PredictionInfo> mapToValue(List<PredictionEntity> predictionEntityList) {
-        return predictionEntityList.stream()
-                .map(PredictionMapper::mapToValue)
-                .collect(Collectors.toList());
     }
 }

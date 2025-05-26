@@ -2,6 +2,7 @@ package com.dsl.vpp.prediction;
 
 import com.dsl.vpp.prediction.dto.response.PredictionGetListResponseDto;
 import com.dsl.vpp.prediction.dto.request.PredictionPostRequestDto;
+import com.dsl.vpp.prediction.dto.response.PredictionGetResponseDto;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import jakarta.validation.Valid;
@@ -24,6 +25,13 @@ public class PredictionController {
         String predictionId = predictionService.create(predictionInfo);
         return ResponseEntity.ok().body(predictionId);
     }
+    
+    @GetMapping("/predictions/{id}")
+    public ResponseEntity<PredictionGetResponseDto> get(String id) {
+        PredictionInfo predictionInfo = predictionService.readById(id);
+        PredictionGetResponseDto responseDto = PredictionMapper.mapToDto(predictionInfo);
+        return ResponseEntity.ok().body(responseDto);
+    }
 
     @GetMapping("/ders/{derId}/predictions")
     public ResponseEntity<PredictionGetListResponseDto> getListByDerBetween(
@@ -36,7 +44,7 @@ public class PredictionController {
     }
 
     @GetMapping("/vpps/{vppId}/predictions")
-    public ResponseEntity<PredictionGetListResponseDto> getPredictionListByVppBetween(
+    public ResponseEntity<PredictionGetListResponseDto> getListByVppBetween(
             @PathVariable String vppId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end

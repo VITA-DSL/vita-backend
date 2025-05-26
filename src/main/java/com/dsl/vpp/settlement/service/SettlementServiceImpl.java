@@ -21,7 +21,7 @@ public class SettlementServiceImpl implements SettlementService {
     @Override
     public String settle(String derId, String generationId) {
         GenerationInfo generationInfo = generationService.readById(generationId);
-        PredictionInfo predictionInfo = predictionService.read(generationInfo.getPredictionId());
+        PredictionInfo predictionInfo = predictionService.readById(generationInfo.getPredictionId());
         Double unitPrice = calculateUnitPrice(generationInfo, predictionInfo);
 
         SettlementAmountInfo settlementAmountInfo = SettlementAmountInfo.builder()
