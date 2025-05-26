@@ -4,20 +4,18 @@ import com.dsl.vpp.der.DerEntity;
 import com.dsl.vpp.der.DerMapper;
 import com.dsl.vpp.der.DerRepository;
 import com.dsl.vpp.der.value.DerInfo;
-import com.dsl.vpp.vpp.core.VppEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dsl.vpp.vpp.core.service.VppService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
+@RequiredArgsConstructor
 @Service
 public class DerServiceImpl implements DerService {
-    DerRepository derRepository;
-
-    @Autowired
-    public DerServiceImpl(DerRepository derRepository) {
-        this.derRepository = derRepository;
-    }
+    private final VppService vppService;
+    private final DerRepository derRepository;
 
     @Override
     public String create(DerInfo der) {
@@ -27,19 +25,23 @@ public class DerServiceImpl implements DerService {
 
     @Override
     public DerInfo readById(String id) {
-        DerEntity der = derRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 DER 아이디입니다."));
-        return DerMapper.mapToValue(der);
+        return derRepository.findById(id)
+                .map(DerMapper::mapToValue)
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 DER 아이디입니다."));
     }
 
     @Override
     public List<DerInfo> readAll() {
-        return DerMapper.mapToValue(derRepository.findAll());
+        return derRepository.findAll().stream()
+                .map(DerMapper::mapToValue)
+                .toList();
     }
 
     @Override
     public List<DerInfo> readByVppId(String vppId) {
-        return DerMapper.mapToValue(derRepository.findByVppId(vppId));
+        return derRepository.findByVppId(vppId).stream()
+                .map(DerMapper::mapToValue)
+                .toList();
     }
 
     @Override
@@ -50,9 +52,10 @@ public class DerServiceImpl implements DerService {
 
     @Override
     public void register(String id, String vppId) {
+        vppService.validateIdExists(vppId);
+
         DerEntity der = derRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 DER 아이디입니다."));
-
         der.register(vppId);
         derRepository.save(der);
     }
@@ -60,7 +63,7 @@ public class DerServiceImpl implements DerService {
     @Override
     public void unregister(String id) {
         DerEntity der = derRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 DER 아이디입니다."));
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 DER 아이디입니다."));
         der.unregister();
         derRepository.save(der);
     }
@@ -68,7 +71,7 @@ public class DerServiceImpl implements DerService {
     @Override
     public void validateIdExists(String id) {
         if(!derRepository.existsById(id)) {
-            throw new IllegalArgumentException("존재하지 않는 DER 아이디입니다.");
+            throw new NoSuchElementException("존재하지 않는 DER 아이디입니다.");
         }
     }
 

@@ -10,11 +10,9 @@ public interface DerService {
     List<DerInfo> readAll();
     List<DerInfo> readByVppId(String vppId);
     void deleteById(String id);
+
     void register(String id, String vppId);
     void unregister(String id);
 
     void validateIdExists(String id);
-
-
-
 }

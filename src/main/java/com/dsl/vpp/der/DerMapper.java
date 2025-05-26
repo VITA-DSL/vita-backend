@@ -24,12 +24,6 @@ public class DerMapper {
                 .build();
     }
 
-    public static List<DerInfo> mapToValue(List<DerEntity> ders) {
-        return ders.stream()
-                .map(DerMapper::mapToValue)
-                .collect(Collectors.toList());
-    }
-
     public static DerEntity mapToEntity(DerInfo der) {
         return DerEntity.builder()
                 .capacity(der.getCapacity())
@@ -44,12 +38,13 @@ public class DerMapper {
                 .build();
     }
 
-    public static DerGetListResponseDto mapToDto(List<DerInfo> ders) {
+    public static DerGetListResponseDto mapToDto(List<DerInfo> derInfos) {
+        ArrayList<DerGetResponseDto> ders = derInfos.stream()
+                .map(DerMapper::mapToDto)
+                .collect(Collectors.toCollection(ArrayList::new));
+
         return DerGetListResponseDto.builder()
-                .ders(ders.stream()
-                        .map(DerMapper::mapToDto)
-                        .collect(Collectors.toCollection(ArrayList::new))
-                )
+                .ders(ders)
                 .build();
     }
 }
