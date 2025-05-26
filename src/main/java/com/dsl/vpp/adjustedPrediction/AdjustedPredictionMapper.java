@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdjustedPredictionMapper {
-    public static AdjustedPredictionInfo mapToValue(String derId, String predictionId, AdjustedPredictionPostRequestDto requestDto) {
+    public static AdjustedPredictionInfo mapToValue(String predictionId, AdjustedPredictionPostRequestDto requestDto) {
         return AdjustedPredictionInfo.builder()
                 .predictionId(predictionId)
                 .amount(requestDto.getAmount())
@@ -21,6 +21,7 @@ public class AdjustedPredictionMapper {
         return AdjustedPredictionInfo.builder()
                 .id(adjustedPrediction.getId())
                 .predictionId(adjustedPrediction.getPredictionId())
+                .amount(adjustedPrediction.getAmount())
                 .dateTime(adjustedPrediction.getDateTime())
                 .build();
     }
