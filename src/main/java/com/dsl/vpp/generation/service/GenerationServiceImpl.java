@@ -1,5 +1,6 @@
 package com.dsl.vpp.generation.service;
 
+import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
 import com.dsl.vpp.generation.GenerationMapper;
 import com.dsl.vpp.generation.GenerationRepository;
 import com.dsl.vpp.generation.value.GenerationInfo;
@@ -16,6 +17,7 @@ import java.util.NoSuchElementException;
 @Service
 public class GenerationServiceImpl implements GenerationService {
     private final PredictionService predictionService;
+    private final AdjustedPredictionService adjustedPredictionService;
     private final GenerationRepository generationRepository;
 
     @Override

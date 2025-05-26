@@ -3,7 +3,8 @@ package com.dsl.vpp.der;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.service.DerServiceImpl;
 import com.dsl.vpp.der.value.DerInfo;
-import com.dsl.vpp.vpp.core.VppEntity;
+import com.dsl.vpp.vpp.core.service.VppService;
+import com.dsl.vpp.vpp.core.service.VppServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class TestDerService {
     DerRepository derRepository = mock(DerRepository.class);
-    DerService derService = new DerServiceImpl(derRepository);
+    VppService vppService = mock(VppServiceImpl.class);
+    DerService derService = new DerServiceImpl(vppService, derRepository);
 
     @BeforeEach
     void setUp() {

@@ -1,7 +1,5 @@
 package com.dsl.vpp.vpp;
 
-import com.dsl.vpp.der.service.DerService;
-import com.dsl.vpp.der.service.DerServiceImpl;
 import com.dsl.vpp.vpp.core.VppEntity;
 import com.dsl.vpp.vpp.core.VppRepository;
 import com.dsl.vpp.vpp.core.service.VppService;
@@ -20,7 +18,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class TestVppService {
     VppRepository vppRepository = mock(VppRepository.class);
-    DerService derService = mock(DerServiceImpl.class);
     VppService vppService = new VppServiceImpl(vppRepository);
 
     @BeforeEach

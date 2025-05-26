@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class SettlementController {
     private final SettlementService settlementService;
 
-    @PostMapping("/ders/{derId}/generations/{generationId}/settlement-amounts")
-    public ResponseEntity<String> settleDer(@PathVariable String derId, @PathVariable String generationId) {
-        String settlementId = settlementService.settle(derId, generationId);
+    @PostMapping("/generations/{generationId}/settlement-amounts")
+    public ResponseEntity<String> settle(@PathVariable String generationId) {
+        String settlementId = settlementService.settle(generationId);
         return ResponseEntity.ok().body(settlementId);
     }
 }
