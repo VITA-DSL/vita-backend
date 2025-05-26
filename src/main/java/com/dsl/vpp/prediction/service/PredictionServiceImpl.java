@@ -35,16 +35,23 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
     @Override
-    public List<PredictionInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end) {
+    public List<PredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
         List<PredictionEntity> predictionEntityList = predictionRepository.findByDerIdAndDateTimeBetween(derId, start, end);
         return PredictionMapper.mapToValue(predictionEntityList);
     }
 
     @Override
-    public List<PredictionInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+    public List<PredictionInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         List<DerInfo> derInfoList = derService.readByVppId(vppId);
         return derInfoList.stream()
-                .flatMap(derInfo -> readByDerBetween(derInfo.getId(), start, end).stream())
+                .flatMap(derInfo -> readByDerIdBetween(derInfo.getId(), start, end).stream())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void validateIdExists(String id) {
+        if(!predictionRepository.existsById(id)) {
+            throw new IllegalArgumentException("존재하지 않는 예측 데이터입니다.");
+        }
     }
 }

@@ -1,12 +1,10 @@
 package com.dsl.vpp.generation;
 
-
-import com.dsl.vpp.der.DerEntity;
-import com.dsl.vpp.der.service.DerService;
-import com.dsl.vpp.der.service.DerServiceImpl;
 import com.dsl.vpp.generation.service.GenerationService;
 import com.dsl.vpp.generation.service.GenerationServiceImpl;
 import com.dsl.vpp.generation.value.GenerationInfo;
+import com.dsl.vpp.prediction.service.PredictionService;
+import com.dsl.vpp.prediction.service.PredictionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +20,15 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class TestGenerationService {
-    DerService derService = mock(DerServiceImpl.class);
+    PredictionService predictionService = mock(PredictionServiceImpl.class);
     GenerationRepository generationRepository = mock(GenerationRepository.class);
-    GenerationService generationService = new GenerationServiceImpl(derService, generationRepository);
+    GenerationService generationService = new GenerationServiceImpl(predictionService, generationRepository);
 
     @BeforeEach
     void setUp() {
         GenerationEntity generationEntity = GenerationEntity.builder()
                 .id("test")
-                .derId("test")
+                .predictionId("test")
                 .amount(300.0)
                 .dateTime(LocalDateTime.now())
                 .build();
@@ -42,7 +40,7 @@ public class TestGenerationService {
     @Test
     void create() {
         GenerationInfo generationInfo = GenerationInfo.builder()
-                .derId("test")
+                .predictionId("test")
                 .amount(300.0)
                 .dateTime(LocalDateTime.now())
                 .build();

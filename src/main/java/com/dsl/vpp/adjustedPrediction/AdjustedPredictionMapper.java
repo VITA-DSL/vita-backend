@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class AdjustedPredictionMapper {
     public static AdjustedPredictionInfo mapToValue(String derId, String predictionId, AdjustedPredictionPostRequestDto requestDto) {
         return AdjustedPredictionInfo.builder()
-                .derId(derId)
                 .predictionId(predictionId)
                 .amount(requestDto.getAmount())
                 .dateTime(requestDto.getDateTime())
@@ -21,7 +20,6 @@ public class AdjustedPredictionMapper {
     public static AdjustedPredictionInfo mapToValue(AdjustedPredictionEntity adjustedPrediction) {
         return AdjustedPredictionInfo.builder()
                 .id(adjustedPrediction.getId())
-                .derId(adjustedPrediction.getDerId())
                 .predictionId(adjustedPrediction.getPredictionId())
                 .dateTime(adjustedPrediction.getDateTime())
                 .build();
@@ -35,7 +33,6 @@ public class AdjustedPredictionMapper {
 
     public static AdjustedPredictionEntity mapToEntity(AdjustedPredictionInfo adjustedPredictionInfo) {
         return AdjustedPredictionEntity.builder()
-                .derId(adjustedPredictionInfo.getDerId())
                 .predictionId(adjustedPredictionInfo.getPredictionId())
                 .amount(adjustedPredictionInfo.getAmount())
                 .dateTime(adjustedPredictionInfo.getDateTime())
@@ -44,7 +41,6 @@ public class AdjustedPredictionMapper {
     public static AdjustedPredictionGetResponseDto mapToDto(AdjustedPredictionInfo adjustedPredictionInfo) {
         return AdjustedPredictionGetResponseDto.builder()
                 .id(adjustedPredictionInfo.getId())
-                .derId(adjustedPredictionInfo.getDerId())
                 .predictionId(adjustedPredictionInfo.getPredictionId())
                 .amount(adjustedPredictionInfo.getAmount())
                 .dateTime(adjustedPredictionInfo.getDateTime())

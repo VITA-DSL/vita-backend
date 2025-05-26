@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface AdjustedPredictionService {
     String create(AdjustedPredictionInfo adjustedPredictionInfo);
-    List<AdjustedPredictionInfo> readByDerBetween(String derId, LocalDateTime start, LocalDateTime end);
-    List<AdjustedPredictionInfo> readByVppBetween(String vppId, LocalDateTime start, LocalDateTime end);
+    AdjustedPredictionInfo readByPredictionId(String predictionId);
+    List<AdjustedPredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
+    List<AdjustedPredictionInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
 }

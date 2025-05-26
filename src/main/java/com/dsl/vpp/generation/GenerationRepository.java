@@ -3,11 +3,11 @@ package com.dsl.vpp.generation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GenerationRepository extends JpaRepository<GenerationEntity, String> {
-    List<GenerationEntity> findByDerId(String derId);
-    List<GenerationEntity> findByDerIdAndDateTimeBetween(String derId, LocalDateTime start, LocalDateTime end);
+    Optional<GenerationEntity> findByPredictionId(String predictionId);
+    List<GenerationEntity> findByPredictionIdIn(List<String> predictionId);
 }

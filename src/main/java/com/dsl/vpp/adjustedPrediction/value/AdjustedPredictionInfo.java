@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 public class AdjustedPredictionInfo {
     String id;
-    String derId;
     String predictionId;
     Double amount;
     LocalDateTime dateTime;

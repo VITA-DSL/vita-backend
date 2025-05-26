@@ -18,9 +18,9 @@ import java.util.List;
 public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
-    @PostMapping("/ders/{derId}/predictions/{predictionId}/adjusted-predictions")
-    public ResponseEntity<String> create(@PathVariable String derId, @PathVariable String predictionId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
-        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(derId, predictionId, requestDto);
+    @PostMapping("predictions/{predictionId}/adjusted-predictions")
+    public ResponseEntity<String> create(@PathVariable String predictionId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
+        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(predictionId, requestDto);
         String generationId = adjustedPredictionService.create(adjustedPredictionInfo);
         return ResponseEntity.ok(generationId);
     }
@@ -31,7 +31,7 @@ public class AdjustedPredictionController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<AdjustedPredictionInfo> adjustedPredictionInfoList = adjustedPredictionService.readByDerBetween(derId, start, end);
+        List<AdjustedPredictionInfo> adjustedPredictionInfoList = adjustedPredictionService.readByDerIdBetween(derId, start, end);
         AdjustedPredictionGetListResponseDto responseDto = AdjustedPredictionMapper.mapToDto(adjustedPredictionInfoList);
         return ResponseEntity.ok(responseDto);
     }
@@ -42,7 +42,7 @@ public class AdjustedPredictionController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<AdjustedPredictionInfo> adjustedPredictionInfoList = adjustedPredictionService.readByVppBetween(vppId, start, end);
+        List<AdjustedPredictionInfo> adjustedPredictionInfoList = adjustedPredictionService.readByVppIdBetween(vppId, start, end);
         AdjustedPredictionGetListResponseDto responseDto = AdjustedPredictionMapper.mapToDto(adjustedPredictionInfoList);
         return ResponseEntity.ok(responseDto);
     }

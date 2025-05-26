@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GenerationMapper {
-    public static GenerationInfo mapToValue(String derId, GenerationPostRequestDto createRequestDto) {
+    public static GenerationInfo mapToValue(String predictionId, GenerationPostRequestDto createRequestDto) {
         return GenerationInfo.builder()
-                .predictionId(createRequestDto.getPredictionId())
-                .derId(derId)
+                .predictionId(predictionId)
                 .amount(createRequestDto.getAmount())
                 .dateTime(createRequestDto.getDateTime())
                 .build();
@@ -22,7 +21,6 @@ public class GenerationMapper {
         return GenerationInfo.builder()
                 .id(generation.getId())
                 .predictionId(generation.getPredictionId())
-                .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
                 .build();
@@ -37,7 +35,6 @@ public class GenerationMapper {
     public static GenerationEntity mapToEntity(GenerationInfo generation) {
         return GenerationEntity.builder()
                 .predictionId(generation.getPredictionId())
-                .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
                 .build();
@@ -46,7 +43,6 @@ public class GenerationMapper {
         return GenerationGetResponseDto.builder()
                 .id(generation.getId())
                 .predictionId(generation.getPredictionId())
-                .derId(generation.getDerId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
                 .build();

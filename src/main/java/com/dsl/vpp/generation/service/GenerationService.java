@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface GenerationService {
     String create(GenerationInfo generation);
-    GenerationInfo read(String id);
-    List<GenerationInfo> readByDerId(String derId);
+    GenerationInfo readById(String id);
+    GenerationInfo readByPredictionId(String predictionId);
     List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
 }

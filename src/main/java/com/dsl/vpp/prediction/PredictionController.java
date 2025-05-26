@@ -31,7 +31,7 @@ public class PredictionController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<PredictionInfo> predictionInfoList = predictionService.readByDerBetween(derId, start, end);
+        List<PredictionInfo> predictionInfoList = predictionService.readByDerIdBetween(derId, start, end);
         return ResponseEntity.ok().body(PredictionMapper.mapToDto(predictionInfoList));
     }
 
@@ -41,7 +41,7 @@ public class PredictionController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
     ) {
-        List<PredictionInfo> predictionInfoList = predictionService.readByVppBetween(vppId, start, end);
+        List<PredictionInfo> predictionInfoList = predictionService.readByVppIdBetween(vppId, start, end);
         PredictionGetListResponseDto responseDto = PredictionMapper.mapToDto(predictionInfoList);
         return ResponseEntity.ok(responseDto);
     }
