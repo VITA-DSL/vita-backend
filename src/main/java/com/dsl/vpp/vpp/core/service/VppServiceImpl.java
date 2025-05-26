@@ -1,6 +1,5 @@
 package com.dsl.vpp.vpp.core.service;
 
-import com.dsl.vpp.vpp.core.VppEntity;
 import com.dsl.vpp.vpp.core.VppMapper;
 import com.dsl.vpp.vpp.core.VppRepository;
 import com.dsl.vpp.vpp.core.value.VppInfo;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class VppServiceImpl implements VppService {
@@ -26,14 +26,16 @@ public class VppServiceImpl implements VppService {
 
     @Override
     public VppInfo readById(String id) {
-        VppEntity vpp = vppRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 VPP 아이디입니다."));
-        return VppMapper.mapToValue(vpp);
+        return vppRepository.findById(id)
+                .map(VppMapper::mapToValue)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 VPP 아이디입니다."));
     }
 
     @Override
     public List<VppInfo> readAll() {
-        return VppMapper.mapToValue(vppRepository.findAll());
+        return vppRepository.findAll().stream()
+                .map(VppMapper::mapToValue)
+                .toList();
     }
 
     @Override
@@ -52,7 +54,7 @@ public class VppServiceImpl implements VppService {
     @Override
     public void validateIdExists(String id) {
         if(!vppRepository.existsById(id)) {
-            throw new IllegalArgumentException("존재하지 않는 VPP 아이디입니다.");
+            throw new NoSuchElementException("존재하지 않는 VPP 아이디입니다.");
         }
     }
 }

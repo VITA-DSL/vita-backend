@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Builder
 @Data
-public class VppReadResponseDto {
+public class VppGetResponseDto {
     String id;
 }

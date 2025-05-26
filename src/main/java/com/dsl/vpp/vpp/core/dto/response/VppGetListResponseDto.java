@@ -7,6 +7,6 @@ import java.util.ArrayList;
 
 @Builder
 @Data
-public class VppReadListResponseDto {
-    ArrayList<VppReadResponseDto> vpps;
+public class VppGetListResponseDto {
+    ArrayList<VppGetResponseDto> vpps;
 }
