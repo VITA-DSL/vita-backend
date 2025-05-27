@@ -52,6 +52,26 @@ public class GenerationServiceImpl implements GenerationService {
         return readByPredictions(predictions);
     }
 
+    @Override
+    public Double calculateOriginalErrorRate(String generationId) {
+        GenerationInfo generationInfo = this.readById(generationId);
+        Double generatedAmount = generationInfo.getAmount();
+        Double predictedAmount = predictionService.readById(generationInfo.getPredictionId()).getAmount();
+        return calculateErrorRate(generatedAmount, predictedAmount);
+    }
+
+    @Override
+    public Double calculateAdjustedErrorRate(String generationId) {
+        GenerationInfo generationInfo = this.readById(generationId);
+        Double generatedAmount = generationInfo.getAmount();
+        Double predictedAmount = adjustedPredictionService.readById(generationInfo.getPredictionId()).getAmount();
+        return calculateErrorRate(generatedAmount, predictedAmount);
+    }
+
+    private Double calculateErrorRate(Double generatedAmount, Double predictedAmount) {
+        return ((generatedAmount - predictedAmount) / generatedAmount) * 100.0;
+    }
+
     private List<GenerationInfo> readByPredictions(List<PredictionInfo> predictions) {
         List<String> predictionIdList = predictions.stream()
                 .map(PredictionInfo::getId)

@@ -12,5 +12,5 @@ public class GenerationInfo {
     String predictionId;
     Double amount;
     LocalDateTime dateTime;
-    LocalDateTime settlementTime;
+    LocalDateTime settledAt;
 }

@@ -1,7 +1,6 @@
 package com.dsl.vpp.settlement.service;
 
 import com.dsl.vpp.generation.service.GenerationService;
-import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.settlementAmount.service.SettlementAmountService;
 import com.dsl.vpp.settlementAmount.value.SettlementAmountInfo;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +15,16 @@ public class SettlementServiceImpl implements SettlementService {
     private final SettlementAmountService settlementAmountService;
 
     @Override
-    public String settle(String derId, String generationId) {
-        GenerationInfo generationInfo = generationService.readById(generationId);
-        Double unitPrice = calculateUnitPrice(generationInfo, predictionInfo);
+    public String settle(String generationId) {
+        Double generatedAmount = generationService.readById(generationId).getAmount();
+        Double errorRate = generationService.calculateAdjustedErrorRate(generationId);
+
+        Double unitPrice = calculateUnitPrice(generatedAmount, errorRate);
 
         SettlementAmountInfo settlementAmountInfo = SettlementAmountInfo.builder()
                 .generationId(generationId)
                 .unitPrice(unitPrice)
-                .amount((int) (generationInfo.getAmount() * unitPrice))
+                .amount((int) (generatedAmount * unitPrice))
                 .settledAt(LocalDateTime.now())
                 .build();
 
@@ -31,7 +32,9 @@ public class SettlementServiceImpl implements SettlementService {
     }
 
     @Override
-    public Double calculateUnitPrice(GenerationInfo generationInfo, PredictionInfo predictionInfo) {
-        return 5.0;
+    public Double calculateUnitPrice(Double generationAmount, Double errorRate) {
+        if (errorRate > 8.0) return 0.0;
+        if (errorRate <= 6.0) return 4.0;
+        return 3.0;
     }
 }

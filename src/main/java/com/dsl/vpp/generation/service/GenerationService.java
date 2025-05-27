@@ -11,4 +11,7 @@ public interface GenerationService {
     GenerationInfo readByPredictionId(String predictionId);
     List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
+
+    Double calculateOriginalErrorRate(String generationId);
+    Double calculateAdjustedErrorRate(String generationId);
 }
