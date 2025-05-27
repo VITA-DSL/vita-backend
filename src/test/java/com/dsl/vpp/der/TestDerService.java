@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -59,7 +60,7 @@ public class TestDerService {
 
     @Test
     void readByNotExistingId() {
-        Assertions.assertThrows(IllegalArgumentException.class, ()->derService.readById("not exist"));
+        Assertions.assertThrows(NoSuchElementException.class, ()->derService.readById("not exist"));
     }
 
     @Test

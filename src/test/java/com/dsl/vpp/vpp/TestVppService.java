@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -51,7 +52,7 @@ public class TestVppService {
     @Test
     void readByNotExistingId() {
         String id = "not exist";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> vppService.readById(id));
+        Assertions.assertThrows(NoSuchElementException.class, () -> vppService.readById(id));
     }
 
     @Test
@@ -63,6 +64,6 @@ public class TestVppService {
     @Test
     void deleteByNotExistingId() {
         String id = "not exist";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> vppService.deleteById(id));
+        Assertions.assertThrows(NoSuchElementException.class, () -> vppService.deleteById(id));
     }
 }

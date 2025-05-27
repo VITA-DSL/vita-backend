@@ -1,6 +1,7 @@
 package com.dsl.vpp.settlement.service;
 
 import com.dsl.vpp.generation.service.GenerationService;
+import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.settlementAmount.service.SettlementAmountService;
 import com.dsl.vpp.settlementAmount.value.SettlementAmountInfo;
 import lombok.RequiredArgsConstructor;
@@ -15,20 +16,28 @@ public class SettlementServiceImpl implements SettlementService {
     private final SettlementAmountService settlementAmountService;
 
     @Override
+    public SettlementAmountInfo simulateWithOriginalPrediction(String generationId) {
+        GenerationInfo generationInfo = generationService.readById(generationId);
+        Double errorRate = generationService.calculateOriginalErrorRate(generationId);
+        return settle(generationInfo, errorRate);
+    }
+
+    @Override
     public String settle(String generationId) {
-        Double generatedAmount = generationService.readById(generationId).getAmount();
+        GenerationInfo generationInfo = generationService.readById(generationId);
         Double errorRate = generationService.calculateAdjustedErrorRate(generationId);
+        SettlementAmountInfo settlementAmountInfo = settle(generationInfo, errorRate);
+        return settlementAmountService.create(settlementAmountInfo);
+    }
 
-        Double unitPrice = calculateUnitPrice(generatedAmount, errorRate);
-
-        SettlementAmountInfo settlementAmountInfo = SettlementAmountInfo.builder()
-                .generationId(generationId)
+    private SettlementAmountInfo settle(GenerationInfo generationInfo, Double errorRate) {
+        Double unitPrice = calculateUnitPrice(generationInfo.getAmount(), errorRate);
+        return SettlementAmountInfo.builder()
+                .generationId(generationInfo.getId())
                 .unitPrice(unitPrice)
-                .amount((int) (generatedAmount * unitPrice))
+                .amount((int) (generationInfo.getAmount() * unitPrice))
                 .settledAt(LocalDateTime.now())
                 .build();
-
-        return settlementAmountService.create(settlementAmountInfo);
     }
 
     @Override
