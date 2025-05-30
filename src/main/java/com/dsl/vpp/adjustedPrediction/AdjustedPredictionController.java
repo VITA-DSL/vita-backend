@@ -19,9 +19,9 @@ import java.util.List;
 public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
-    @PostMapping("predictions/{predictionId}/adjusted-prediction")
-    public ResponseEntity<String> create(@PathVariable String predictionId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
-        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(predictionId, requestDto);
+    @PostMapping("ders/{derId}/adjusted-predictions")
+    public ResponseEntity<String> create(@PathVariable String derId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
+        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(derId, requestDto);
         String generationId = adjustedPredictionService.create(adjustedPredictionInfo);
         return ResponseEntity.ok(generationId);
     }
@@ -29,13 +29,6 @@ public class AdjustedPredictionController {
     @GetMapping("adjusted-predictions/{id}")
     public ResponseEntity<AdjustedPredictionGetResponseDto> getAdjustedPrediction(@PathVariable String id) {
         AdjustedPredictionInfo adjustedPredictionInfo = adjustedPredictionService.readById(id);
-        AdjustedPredictionGetResponseDto responseDto = AdjustedPredictionMapper.mapToDto(adjustedPredictionInfo);
-        return ResponseEntity.ok().body(responseDto);
-    }
-
-    @GetMapping("predictions/{predictionId}/adjusted-prediction")
-    public ResponseEntity<AdjustedPredictionGetResponseDto> getAdjustedPredictionByPrediction(@PathVariable String predictionId) {
-        AdjustedPredictionInfo adjustedPredictionInfo = adjustedPredictionService.readByPredictionId(predictionId);
         AdjustedPredictionGetResponseDto responseDto = AdjustedPredictionMapper.mapToDto(adjustedPredictionInfo);
         return ResponseEntity.ok().body(responseDto);
     }

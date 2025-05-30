@@ -6,8 +6,6 @@ import com.dsl.vpp.adjustedPrediction.AdjustedPredictionRepository;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.value.DerInfo;
-import com.dsl.vpp.prediction.service.PredictionService;
-import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,16 +46,6 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
                 .toList();
 
         return adjustedPredictionRepository.findByDerIdInAndDateTimeBetween(derIds, start, end).stream()
-                .map(AdjustedPredictionMapper::mapToValue)
-                .toList();
-    }
-
-    private List<AdjustedPredictionInfo> readByPredictions(List<PredictionInfo> predictions) {
-        List<String> predictionIds = predictions.stream()
-                .map(PredictionInfo::getId)
-                .toList();
-
-        return adjustedPredictionRepository.findByPredictionIdIn(predictionIds).stream()
                 .map(AdjustedPredictionMapper::mapToValue)
                 .toList();
     }

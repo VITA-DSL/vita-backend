@@ -11,4 +11,5 @@ public interface PredictionService {
     List<PredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<PredictionInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
     void validateIdExists(String id);
+    void validateDateTime(LocalDateTime dateTime);
 }

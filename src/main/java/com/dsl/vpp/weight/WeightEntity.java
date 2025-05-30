@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class WeightEntity {
     @Id
     private String id;
-    private String predictionId;
+    private String derId;
     private Double trustRate;
     private LocalDateTime dateTime;
 }

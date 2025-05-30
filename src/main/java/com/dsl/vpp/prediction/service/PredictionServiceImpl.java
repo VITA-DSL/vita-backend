@@ -57,4 +57,13 @@ public class PredictionServiceImpl implements PredictionService {
             throw new NoSuchElementException("존재하지 않는 예측 데이터입니다.");
         }
     }
+
+    @Override
+    public void validateDateTime(LocalDateTime dateTime) {
+        if(dateTime.getMinute() != 0 || dateTime.getSecond() != 0 || dateTime.getNano() == 0) {
+            throw new IllegalArgumentException("예측 시간은 1시간 단위여야 합니다. 분, 초 단위가 존재해선 안됩니다.");
+        }
+    }
+
+
 }

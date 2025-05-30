@@ -1,11 +1,13 @@
 package com.dsl.vpp.generation.service;
 
 import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
+import com.dsl.vpp.generation.GenerationEntity;
 import com.dsl.vpp.generation.GenerationMapper;
 import com.dsl.vpp.generation.GenerationRepository;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
+import com.dsl.vpp.weight.service.WeightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,17 @@ import java.util.NoSuchElementException;
 public class GenerationServiceImpl implements GenerationService {
     private final PredictionService predictionService;
     private final AdjustedPredictionService adjustedPredictionService;
+    private final WeightService weightService;
     private final GenerationRepository generationRepository;
 
     @Override
-    public String create(GenerationInfo generation) {
-        predictionService.validateIdExists(generation.getPredictionId());
-        return generationRepository.save(GenerationMapper.mapToEntity(generation)).getId();
+    public String create(GenerationInfo generationInfo) {
+        PredictionInfo predictionInfo = predictionService.readById(generationInfo.getPredictionId());
+
+        weightService.updateWeight(predictionInfo, generationInfo);
+
+        GenerationEntity generationEntity = GenerationMapper.mapToEntity(generationInfo);
+        return generationRepository.save(generationEntity).getId();
     }
 
     @Override

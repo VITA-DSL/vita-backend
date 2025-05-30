@@ -4,16 +4,16 @@ import com.dsl.vpp.adjustedPrediction.dto.AdjustedPredictionPostRequestDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponseDto;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
-import com.dsl.vpp.prediction.PredictionEntity;
+import com.dsl.vpp.prediction.value.PredictionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdjustedPredictionMapper {
-    public static AdjustedPredictionInfo mapToValue(AdjustedPredictionPostRequestDto requestDto) {
+    public static AdjustedPredictionInfo mapToValue(String derId, AdjustedPredictionPostRequestDto requestDto) {
         return AdjustedPredictionInfo.builder()
-                .derId(requestDto.getDerId())
+                .derId(derId)
                 .amount(requestDto.getAmount())
                 .dateTime(requestDto.getDateTime())
                 .build();
@@ -31,6 +31,14 @@ public class AdjustedPredictionMapper {
         return adjustedPredictionEntityList.stream()
                 .map(AdjustedPredictionMapper::mapToValue)
                 .collect(Collectors.toList());
+    }
+
+    public static AdjustedPredictionInfo mapToValue(PredictionInfo predictionInfo, Double adjustedAmount) {
+        return AdjustedPredictionInfo.builder()
+                .derId(predictionInfo.getDerId())
+                .amount(adjustedAmount)
+                .dateTime(predictionInfo.getDateTime())
+                .build();
     }
 
     public static AdjustedPredictionEntity mapToEntity(AdjustedPredictionInfo adjustedPredictionInfo) {
