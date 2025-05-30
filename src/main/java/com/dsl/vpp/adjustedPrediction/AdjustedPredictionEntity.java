@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AdjustedPredictionEntity {
     @Id
     String id;
-    String predictionId;
+    String derId;
     Double amount;
     LocalDateTime dateTime;
 

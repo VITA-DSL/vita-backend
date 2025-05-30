@@ -4,15 +4,16 @@ import com.dsl.vpp.adjustedPrediction.dto.AdjustedPredictionPostRequestDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponseDto;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.prediction.PredictionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdjustedPredictionMapper {
-    public static AdjustedPredictionInfo mapToValue(String predictionId, AdjustedPredictionPostRequestDto requestDto) {
+    public static AdjustedPredictionInfo mapToValue(AdjustedPredictionPostRequestDto requestDto) {
         return AdjustedPredictionInfo.builder()
-                .predictionId(predictionId)
+                .derId(requestDto.getDerId())
                 .amount(requestDto.getAmount())
                 .dateTime(requestDto.getDateTime())
                 .build();
@@ -20,7 +21,7 @@ public class AdjustedPredictionMapper {
     public static AdjustedPredictionInfo mapToValue(AdjustedPredictionEntity adjustedPrediction) {
         return AdjustedPredictionInfo.builder()
                 .id(adjustedPrediction.getId())
-                .predictionId(adjustedPrediction.getPredictionId())
+                .derId(adjustedPrediction.getDerId())
                 .amount(adjustedPrediction.getAmount())
                 .dateTime(adjustedPrediction.getDateTime())
                 .build();
@@ -34,7 +35,7 @@ public class AdjustedPredictionMapper {
 
     public static AdjustedPredictionEntity mapToEntity(AdjustedPredictionInfo adjustedPredictionInfo) {
         return AdjustedPredictionEntity.builder()
-                .predictionId(adjustedPredictionInfo.getPredictionId())
+                .derId(adjustedPredictionInfo.getDerId())
                 .amount(adjustedPredictionInfo.getAmount())
                 .dateTime(adjustedPredictionInfo.getDateTime())
                 .build();
@@ -42,7 +43,7 @@ public class AdjustedPredictionMapper {
     public static AdjustedPredictionGetResponseDto mapToDto(AdjustedPredictionInfo adjustedPredictionInfo) {
         return AdjustedPredictionGetResponseDto.builder()
                 .id(adjustedPredictionInfo.getId())
-                .predictionId(adjustedPredictionInfo.getPredictionId())
+                .derId(adjustedPredictionInfo.getDerId())
                 .amount(adjustedPredictionInfo.getAmount())
                 .dateTime(adjustedPredictionInfo.getDateTime())
                 .build();
