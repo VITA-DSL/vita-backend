@@ -9,6 +9,7 @@ public interface PredictionService {
     String create(PredictionInfo predictionInfo);
     PredictionInfo readById(String predictionId);
     List<PredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
+    List<PredictionInfo> readMonthlyByDerId(String derId, Integer month);
     List<PredictionInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
     void validateIdExists(String id);
     void validateDateTime(LocalDateTime dateTime);

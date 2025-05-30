@@ -9,6 +9,7 @@ import com.dsl.vpp.weight.value.WeightInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,11 +19,11 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     private final WeightService weightService;
 
     @Override
-    public String adjust(PredictionInfo predictionInfo) {
-        final int WINDOW_SIZE = 24;
+    public Double adjust(String derId, LocalDateTime dateTime) {
+        final int WINDOW_SIZE = 30;
         final double DECAY_FACTOR = 0.9;
 
-        List<Double> trustRates = weightService.getLatestWeightsByWindowSize(predictionInfo.getDerId(), WINDOW_SIZE).stream()
+        List<Double> trustRates = weightService.getLatestWeightsByWindowSize(derId, WINDOW_SIZE).stream()
                 .map(WeightInfo::getTrustRate)
                 .toList();
 

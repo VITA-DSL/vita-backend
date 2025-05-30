@@ -9,6 +9,7 @@ import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,6 +37,13 @@ public class PredictionServiceImpl implements PredictionService {
     @Override
     public List<PredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
         return predictionRepository.findByDerIdAndDateTimeBetween(derId, start, end).stream()
+                .map(PredictionMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
+    public List<PredictionInfo> readMonthlyByDerId(String derId, Integer month) {
+        return predictionRepository.findByMonth(month).stream()
                 .map(PredictionMapper::mapToValue)
                 .toList();
     }

@@ -20,9 +20,8 @@ public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
     @PostMapping("ders/{derId}/adjusted-predictions")
-    public ResponseEntity<String> create(@PathVariable String derId, @Valid @RequestBody AdjustedPredictionPostRequestDto requestDto) {
-        AdjustedPredictionInfo adjustedPredictionInfo = AdjustedPredictionMapper.mapToValue(derId, requestDto);
-        String generationId = adjustedPredictionService.create(adjustedPredictionInfo);
+    public ResponseEntity<String> create(@PathVariable String derId) {
+        String generationId = adjustedPredictionService.createTomorrowPredictions(derId);
         return ResponseEntity.ok(generationId);
     }
 
