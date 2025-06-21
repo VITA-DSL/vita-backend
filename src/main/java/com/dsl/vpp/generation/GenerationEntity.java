@@ -6,11 +6,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "generation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@Entity(name = "generation")
 public class GenerationEntity {
     @Id
     String id;

@@ -5,10 +5,10 @@ import com.dsl.vpp.prediction.value.PredictionInfo;
 import com.dsl.vpp.weight.WeightEntity;
 import com.dsl.vpp.weight.WeightMapper;
 import com.dsl.vpp.weight.WeightRepository;
-import com.dsl.vpp.weight.value.WeightInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -40,9 +40,9 @@ public class WeightServiceImpl implements WeightService {
     }
 
     @Override
-    public List<WeightInfo> getLatestWeightsByWindowSize(String derId, Integer windowSize) {
-        return weightRepository.findLatestWeightsInWindowByDerId(windowSize, derId).stream()
-                .map(WeightMapper::mapToValue)
+    public List<Double> getTrustRatesByWindowSize(String derId, LocalDateTime timestamp, Integer windowSize) {
+        return weightRepository.findWeightsBeforeDateTime(derId, timestamp, windowSize).stream()
+                .map(WeightEntity::getTrustRate)
                 .toList();
     }
 }

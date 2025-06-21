@@ -1,7 +1,7 @@
 package com.dsl.vpp.adjustment;
 
-import java.time.LocalDateTime;
+import com.dsl.vpp.prediction.value.PredictionInfo;
 
 public interface AdjustmentService {
-    Double adjust(String derId, LocalDateTime dateTime);
+    Double adjust(PredictionInfo prediction);
 }

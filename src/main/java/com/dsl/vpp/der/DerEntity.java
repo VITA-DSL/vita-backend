@@ -5,11 +5,11 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Entity(name="der")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@Entity(name="der")
 public class DerEntity {
     @Id
     String id;

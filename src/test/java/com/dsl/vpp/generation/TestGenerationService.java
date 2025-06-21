@@ -7,6 +7,7 @@ import com.dsl.vpp.generation.service.GenerationServiceImpl;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.service.PredictionServiceImpl;
+import com.dsl.vpp.weight.service.WeightService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,8 @@ public class TestGenerationService {
     PredictionService predictionService = mock(PredictionServiceImpl.class);
     AdjustedPredictionService adjustedPredictionService = mock(AdjustedPredictionServiceImpl.class);
     GenerationRepository generationRepository = mock(GenerationRepository.class);
-    GenerationService generationService = new GenerationServiceImpl(predictionService, adjustedPredictionService, generationRepository);
+    WeightService weightService = mock(WeightService.class);
+    GenerationService generationService = new GenerationServiceImpl(predictionService, adjustedPredictionService, weightService, generationRepository);
 
     @BeforeEach
     void setUp() {

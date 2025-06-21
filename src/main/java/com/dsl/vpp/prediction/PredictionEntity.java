@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Builder
-@Entity(name = "predicted")
+@Entity(name = "prediction")
 public class PredictionEntity {
     @Id
     String id;

@@ -1,11 +1,9 @@
 package com.dsl.vpp.adjustedPrediction;
 
-import com.dsl.vpp.adjustedPrediction.dto.AdjustedPredictionPostRequestDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponseDto;
 import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +18,9 @@ public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
     @PostMapping("ders/{derId}/adjusted-predictions")
-    public ResponseEntity<String> create(@PathVariable String derId) {
-        String generationId = adjustedPredictionService.createTomorrowPredictions(derId);
-        return ResponseEntity.ok(generationId);
+    public ResponseEntity<Void> generateAdjustedPrediction(@PathVariable String derId) {
+        adjustedPredictionService.generateAdjustedPrediction(derId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("adjusted-predictions/{id}")

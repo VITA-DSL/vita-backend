@@ -7,10 +7,11 @@ import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
 import com.dsl.vpp.adjustment.AdjustmentService;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.value.DerInfo;
+import com.dsl.vpp.prediction.service.PredictionService;
+import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,29 +19,28 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Service
 public class AdjustedPredictionServiceImpl implements AdjustedPredictionService {
-    private final DerService derService;
-    private final AdjustmentService adjustmentService;
     private final AdjustedPredictionRepository adjustedPredictionRepository;
 
+    private final AdjustmentService adjustmentService;
+    private final PredictionService predictionService;
+    private final DerService derService;
+
     @Override
-    public void createTomorrowPredictions(String derId) {
-        AdjustedPredictionInfo.AdjustedPredictionInfoBuilder adjustedPredictionInfoBuilder = AdjustedPredictionInfo.builder()
-                .derId(derId);
+    public void generateAdjustedPrediction(String predictionId) {
+        PredictionInfo prediction = predictionService.readById(predictionId);
 
-        LocalDate date = LocalDate.now();
+        AdjustedPredictionInfo adjustedPrediction = AdjustedPredictionInfo.builder()
+                .derId(prediction.getDerId())
+                .amount(adjustmentService.adjust(prediction))
+                .dateTime(prediction.getDateTime())
+                .build();
 
-        for (int i=0;i<=23;i++) {
-            LocalDateTime targetTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), i, 0, 0, 0);
-            Double amount = adjustmentService.adjust(derId, targetTime);
+        saveAdjustedPrediction(adjustedPrediction);
+    }
 
-            AdjustedPredictionInfo adjustedPredictionInfo = adjustedPredictionInfoBuilder
-                    .dateTime(targetTime)
-                    .amount(amount)
-                    .build();
-
-            AdjustedPredictionEntity adjustedPredictionEntity = AdjustedPredictionMapper.mapToEntity(adjustedPredictionInfo);
-            adjustedPredictionRepository.save(adjustedPredictionEntity);
-        }
+    private void saveAdjustedPrediction(AdjustedPredictionInfo adjustedPrediction) {
+        AdjustedPredictionEntity adjustedPredictionEntity = AdjustedPredictionMapper.mapToEntity(adjustedPrediction);
+        adjustedPredictionRepository.save(adjustedPredictionEntity);
     }
 
     @Override
