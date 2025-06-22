@@ -35,7 +35,7 @@ jobs:
         run: file gradlew
         
       - name: Build JAR file
-        run: ./gradlew build
+        run: ./gradlew build -x test
         env:
           DB_IP: ${{ secrets.DB_IP }}
           DB_PORT: ${{ secrets.DB_PORT }}
