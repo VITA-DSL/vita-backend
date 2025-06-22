@@ -16,9 +16,8 @@ public interface AdjustedPredictionRepository extends JpaRepository<com.dsl.vpp.
     List<AdjustedPredictionEntity> findByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
     @Modifying
     @Query(value = """
-    INSERT INTO adjusted_prediction
+    INSERT IGNORE INTO adjusted_prediction
     VALUES (:id, :derId, :amount, :dateTime)
-    ON CONFLICT (der_id, date_time) DO NOTHING
     """, nativeQuery = true)
     @Transactional
     void insertIgnore(@Param("id") String id, @Param("derId") String derId, @Param("amount") double amount, @Param("dateTime") LocalDateTime dateTime);
