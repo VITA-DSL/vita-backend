@@ -61,6 +61,14 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
     }
 
     @Override
+    public List<AdjustedPredictionInfo> readByIds(List<String> predictionIds) {
+        return adjustedPredictionRepository.findAllById(predictionIds)
+                .stream()
+                .map(AdjustedPredictionMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
     public List<AdjustedPredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
         return adjustedPredictionRepository.findByDerIdAndDateTimeBetween(derId, start, end).stream()
                 .map(AdjustedPredictionMapper::mapToValue)

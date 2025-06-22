@@ -6,13 +6,19 @@ import com.dsl.vpp.generation.service.GenerationService;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
+import com.dsl.vpp.settlementRecord.SettlementRecordMapper;
 import com.dsl.vpp.settlementRecord.service.SettlementRecordService;
 import com.dsl.vpp.settlementRecord.value.SettlementRecordInfo;
 import com.dsl.vpp.settlementRecord.value.SettlementAmountInfo;
+import com.dsl.vpp.weight.WeightEntity;
+import com.dsl.vpp.weight.WeightMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,10 +49,36 @@ public class SettlementServiceImpl implements SettlementService {
 
     @Override
     public void settleByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
-        generationService.readByVppIdBetween(vppId, start, end)
-                .forEach(generation -> {
-                    settle(generation.getId());
-                });
+        List<GenerationInfo> generations = generationService.readByVppIdBetween(vppId, start, end);
+        List<String> predictionIds = generations.stream()
+                .map(GenerationInfo::getPredictionId)
+                .distinct()
+                .toList();
+
+        List<PredictionInfo> predictions = predictionService.readByIds(predictionIds);
+        List<AdjustedPredictionInfo> adjustedPredictions = adjustedPredictionService.readByIds(predictionIds);
+
+        Map<String, PredictionInfo> predictionMap = predictions.stream()
+                .collect(Collectors.toMap(PredictionInfo::getId, p -> p));
+
+        Map<String, AdjustedPredictionInfo> adjustedPredictionMap = adjustedPredictions.stream()
+                .collect(Collectors.toMap(AdjustedPredictionInfo::getId, p -> p));
+
+        for (GenerationInfo generation : generations) {
+            PredictionInfo prediction = predictionMap.get(generation.getPredictionId());
+            AdjustedPredictionInfo adjustedPrediction = adjustedPredictionMap.get(generation.getPredictionId());
+
+            if (prediction != null && adjustedPrediction != null) {
+                SettlementAmountInfo original = createSettlementAmount(generation.getAmount(), prediction.getAmount());
+                SettlementAmountInfo adjusted = createSettlementAmount(generation.getAmount(), adjustedPrediction.getAmount());
+                settlementRecordService.create(SettlementRecordInfo.builder()
+                        .original(original)
+                        .adjusted(adjusted)
+                        .dateTime(generation.getDateTime())
+                        .build());
+            }
+        }
+
     }
 
     @Override
