@@ -1,5 +1,7 @@
 package com.dsl.vpp.adjustedPrediction;
 
+import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,4 +23,15 @@ public interface AdjustedPredictionRepository extends JpaRepository<com.dsl.vpp.
     """, nativeQuery = true)
     @Transactional
     void insertIgnore(@Param("id") String id, @Param("derId") String derId, @Param("amount") double amount, @Param("dateTime") LocalDateTime dateTime);
+
+    @Query(value = """
+            SELECT SUM(amount) AS totalAmount, DATE(date_time) AS date
+            FROM adjusted
+            WHERE der_id IN (:derIds)
+            AND date_time BETWEEN (:start) AND (:end)
+            GROUP BY DATE(date_time)
+            ORDER BY DATE(date_time)
+            """,
+            nativeQuery = true)
+    List<DailyAdjustedPredictionInfo> findDailyByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
 }

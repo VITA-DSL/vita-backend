@@ -3,6 +3,7 @@ package com.dsl.vpp.adjustedPrediction.service;
 import com.dsl.vpp.adjustedPrediction.AdjustedPredictionMapper;
 import com.dsl.vpp.adjustedPrediction.AdjustedPredictionRepository;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
 import com.dsl.vpp.adjustment.AdjustmentService;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.value.DerInfo;
@@ -11,6 +12,7 @@ import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -84,5 +86,14 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
         return adjustedPredictionRepository.findByDerIdInAndDateTimeBetween(derIds, start, end).stream()
                 .map(AdjustedPredictionMapper::mapToValue)
                 .toList();
+    }
+
+    @Override
+    public List<DailyAdjustedPredictionInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
+        List<String> derIds = derService.readByVppId(vppId).stream()
+                .map(DerInfo::getId)
+                .toList();
+
+        return adjustedPredictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
     }
 }

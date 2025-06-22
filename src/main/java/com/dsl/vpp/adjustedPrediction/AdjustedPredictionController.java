@@ -2,13 +2,16 @@ package com.dsl.vpp.adjustedPrediction;
 
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponseDto;
+import com.dsl.vpp.adjustedPrediction.dto.response.DailyAdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,6 +56,17 @@ public class AdjustedPredictionController {
     ) {
         List<AdjustedPredictionInfo> adjustedPredictionInfoList = adjustedPredictionService.readByVppIdBetween(vppId, start, end);
         AdjustedPredictionGetListResponseDto responseDto = AdjustedPredictionMapper.mapToDto(adjustedPredictionInfoList);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/vpps/{vppId}/adjusted-predictions/daily")
+    public ResponseEntity<DailyAdjustedPredictionGetListResponseDto> getGenerationListByVppBetween(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        List<DailyAdjustedPredictionInfo> dailyAdjustedPredictions = adjustedPredictionService.readDailyByVppIdBetween(vppId, start, end);
+        DailyAdjustedPredictionGetListResponseDto responseDto = AdjustedPredictionMapper.mapDailyPredictionsToDto(dailyAdjustedPredictions);
         return ResponseEntity.ok(responseDto);
     }
 }

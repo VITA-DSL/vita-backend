@@ -3,7 +3,13 @@ package com.dsl.vpp.adjustedPrediction;
 import com.dsl.vpp.adjustedPrediction.dto.AdjustedPredictionPostRequestDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponseDto;
+import com.dsl.vpp.adjustedPrediction.dto.response.DailyAdjustedPredictionGetListResponseDto;
+import com.dsl.vpp.adjustedPrediction.dto.response.DailyAdjustedPredictionGetResponseDto;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
+import com.dsl.vpp.prediction.PredictionMapper;
+import com.dsl.vpp.prediction.dto.response.DailyPredictionGetListResponseDto;
+import com.dsl.vpp.prediction.dto.response.DailyPredictionGetResponseDto;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 
 import java.util.ArrayList;
@@ -65,6 +71,23 @@ public class AdjustedPredictionMapper {
 
         return AdjustedPredictionGetListResponseDto.builder()
                 .adjustedPredictions(adjustedPredictions)
+                .build();
+    }
+
+    public static DailyAdjustedPredictionGetListResponseDto mapDailyPredictionsToDto(List<DailyAdjustedPredictionInfo> dailyAdjustedPredictions) {
+        List<DailyAdjustedPredictionGetResponseDto> dailyAdjustedPredictionDtos = dailyAdjustedPredictions.stream()
+                .map(AdjustedPredictionMapper::mapDailyPredictionToDto)
+                .toList();
+
+        return DailyAdjustedPredictionGetListResponseDto.builder()
+                .adjustedPredictions(dailyAdjustedPredictionDtos)
+                .build();
+    }
+
+    public static DailyAdjustedPredictionGetResponseDto mapDailyPredictionToDto(DailyAdjustedPredictionInfo dailyAdjustedPrediction) {
+        return DailyAdjustedPredictionGetResponseDto.builder()
+                .totalAmount(dailyAdjustedPrediction.getTotalAmount())
+                .date(dailyAdjustedPrediction.getDate())
                 .build();
     }
 }
