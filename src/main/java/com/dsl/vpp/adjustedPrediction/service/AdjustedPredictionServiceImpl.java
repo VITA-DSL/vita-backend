@@ -26,6 +26,11 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
     private final DerService derService;
 
     @Override
+    public void generateAdjustedPredictionsByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
+        List<PredictionInfo> predictions = predictionService.readByDerIdBetween(derId, LocalDateTime.MIN, LocalDateTime.MAX);
+    }
+
+    @Override
     public void generateAdjustedPrediction(String predictionId) {
         PredictionInfo prediction = predictionService.readById(predictionId);
 

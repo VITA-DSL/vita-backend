@@ -1,9 +1,12 @@
 package com.dsl.vpp.generation.service;
 
 import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
+import com.dsl.vpp.der.service.DerService;
+import com.dsl.vpp.der.value.DerInfo;
 import com.dsl.vpp.generation.GenerationEntity;
 import com.dsl.vpp.generation.GenerationMapper;
 import com.dsl.vpp.generation.GenerationRepository;
+import com.dsl.vpp.generation.value.DailyGenerationInfo;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
@@ -11,16 +14,20 @@ import com.dsl.vpp.weight.service.WeightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class GenerationServiceImpl implements GenerationService {
+    private final DerService derService;
     private final PredictionService predictionService;
     private final AdjustedPredictionService adjustedPredictionService;
     private final WeightService weightService;
+
     private final GenerationRepository generationRepository;
 
     @Override
@@ -49,14 +56,27 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
-        List<PredictionInfo> predictions = predictionService.readByDerIdBetween(derId, start, end);
-        return readByPredictions(predictions);
+        return generationRepository.findByDerIdAndDateTimeBetween(derId, start, end).stream()
+                .map(GenerationMapper::mapToValue)
+                .toList();
     }
 
     @Override
-    public List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
-        List<PredictionInfo> predictions = predictionService.readByVppIdBetween(vppId, start, end);
-        return readByPredictions(predictions);
+    public List<DailyGenerationInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
+        List<String> derIds = derService.readByVppId(vppId).stream()
+                .map(DerInfo::getId)
+                .toList();
+
+        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
+                .collect(Collectors.groupingBy(
+                        g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
+                        Collectors.summingDouble(GenerationEntity::getAmount) // 날짜 단위 발전량 합계
+                ))
+                .entrySet()
+                .stream()
+                .map(GenerationMapper::mapToValue)
+                .toList();
     }
 
     @Override
@@ -83,6 +103,7 @@ public class GenerationServiceImpl implements GenerationService {
         List<String> predictionIdList = predictions.stream()
                 .map(PredictionInfo::getId)
                 .toList();
+
         return generationRepository.findByPredictionIdIn(predictionIdList).stream()
                 .map(GenerationMapper::mapToValue)
                 .toList();

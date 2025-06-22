@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 public class GenerationInfo {
     String id;
+    String derId;
     String predictionId;
     Double amount;
     LocalDateTime dateTime;
-    LocalDateTime settledAt;
 }

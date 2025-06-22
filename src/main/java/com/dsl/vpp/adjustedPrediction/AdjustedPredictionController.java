@@ -18,8 +18,12 @@ public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
     @PostMapping("ders/{derId}/adjusted-predictions")
-    public ResponseEntity<Void> generateAdjustedPrediction(@PathVariable String derId) {
-        adjustedPredictionService.generateAdjustedPrediction(derId);
+    public ResponseEntity<Void> generateAdjustedPredictionsByDerIdBetween(
+            @PathVariable String derId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
+    ) {
+        adjustedPredictionService.generateAdjustedPredictionsByDerIdBetween(derId, start, end);
         return ResponseEntity.ok().build();
     }
 

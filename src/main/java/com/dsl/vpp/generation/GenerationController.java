@@ -1,9 +1,11 @@
 package com.dsl.vpp.generation;
 
 import com.dsl.vpp.generation.dto.request.GenerationPostRequestDto;
+import com.dsl.vpp.generation.dto.response.GenerationGetDailyListResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationGetListResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationGetResponseDto;
 import com.dsl.vpp.generation.service.GenerationService;
+import com.dsl.vpp.generation.value.DailyGenerationInfo;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,14 +47,15 @@ public class GenerationController {
         return ResponseEntity.ok(responseDto);
     }
 
+
     @GetMapping("/vpps/{vppId}/generations")
-    public ResponseEntity<GenerationGetListResponseDto> getGenerationListByVppBetween(
+    public ResponseEntity<GenerationGetDailyListResponseDto> getDailyGenerationListByVppBetween(
             @PathVariable String vppId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
     ) {
-        List<GenerationInfo> generationInfos = generationService.readByVppIdBetween(vppId, start, end);
-        GenerationGetListResponseDto responseDto = GenerationMapper.mapToDto(generationInfos);
+        List<DailyGenerationInfo> dailyGenerations = generationService.readDailyByVppIdBetween(vppId, start, end);
+        GenerationGetDailyListResponseDto responseDto = GenerationMapper.mapDailyGenerationToDto(dailyGenerations);
         return ResponseEntity.ok(responseDto);
     }
 }
