@@ -25,6 +25,7 @@ public class GenerationMapper {
     public static GenerationInfo mapToValue(GenerationEntity generation) {
         return GenerationInfo.builder()
                 .id(generation.getId())
+                .derId(generation.getDerId())
                 .predictionId(generation.getPredictionId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
@@ -46,6 +47,7 @@ public class GenerationMapper {
 
     public static GenerationEntity mapToEntity(GenerationInfo generation) {
         return GenerationEntity.builder()
+                .derId(generation.getDerId())
                 .predictionId(generation.getPredictionId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
@@ -72,6 +74,7 @@ public class GenerationMapper {
     public static GenerationGetResponseDto mapToDto(GenerationInfo generation) {
         return GenerationGetResponseDto.builder()
                 .id(generation.getId())
+                .derId(generation.getDerId())
                 .predictionId(generation.getPredictionId())
                 .amount(generation.getAmount())
                 .dateTime(generation.getDateTime())
