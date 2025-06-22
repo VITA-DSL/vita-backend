@@ -35,6 +35,7 @@ public class AdjustedPredictionMapper {
 
     public static AdjustedPredictionInfo mapToValue(PredictionInfo predictionInfo, Double adjustedAmount) {
         return AdjustedPredictionInfo.builder()
+                .id(predictionInfo.getId())
                 .derId(predictionInfo.getDerId())
                 .amount(adjustedAmount)
                 .dateTime(predictionInfo.getDateTime())
@@ -43,6 +44,7 @@ public class AdjustedPredictionMapper {
 
     public static AdjustedPredictionEntity mapToEntity(AdjustedPredictionInfo adjustedPredictionInfo) {
         return AdjustedPredictionEntity.builder()
+                .id(adjustedPredictionInfo.getId())
                 .derId(adjustedPredictionInfo.getDerId())
                 .amount(adjustedPredictionInfo.getAmount())
                 .dateTime(adjustedPredictionInfo.getDateTime())
