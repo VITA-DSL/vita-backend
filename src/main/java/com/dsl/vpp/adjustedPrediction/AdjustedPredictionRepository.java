@@ -1,5 +1,6 @@
 package com.dsl.vpp.adjustedPrediction;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +20,6 @@ public interface AdjustedPredictionRepository extends JpaRepository<com.dsl.vpp.
     VALUES (:id, :derId, :amount, :dateTime)
     ON CONFLICT (der_id, date_time) DO NOTHING
     """, nativeQuery = true)
+    @Transactional
     void insertIgnore(@Param("id") String id, @Param("derId") String derId, @Param("amount") double amount, @Param("dateTime") LocalDateTime dateTime);
 }
