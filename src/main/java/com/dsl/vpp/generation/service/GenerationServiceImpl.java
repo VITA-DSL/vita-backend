@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -66,15 +65,6 @@ public class GenerationServiceImpl implements GenerationService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
-                .stream()
-                .collect(Collectors.groupingBy(
-                        g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
-                        Collectors.summingDouble(GenerationEntity::getAmount) // 날짜 단위 발전량 합계
-                ))
-                .entrySet()
-                .stream()
-                .map(GenerationMapper::mapToValue)
-                .toList();
+        return generationRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
     }
 }

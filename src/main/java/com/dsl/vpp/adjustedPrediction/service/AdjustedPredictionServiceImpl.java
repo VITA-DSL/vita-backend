@@ -10,11 +10,14 @@ import com.dsl.vpp.der.value.DerInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,11 +30,22 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
 
     @Override
     public void generateAdjustedPredictionsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+        /*
+        List<String> predictionIds = predictionService.readByVppIdBetween(vppId, start, end)
+                .stream()
+                .map(PredictionInfo::getId)
+                .toList();
+
         predictionService.readByVppIdBetween(vppId, start, end)
                 .forEach(prediction -> {
                     if (!adjustedPredictionRepository.existsByDerIdAndDateTime(prediction.getDerId(), prediction.getDateTime())) {
                         generateAdjustedPrediction(prediction.getId());
                     }});
+        */
+        List<PredictionInfo> predictions = predictionService.readByVppIdBetween(vppId, start, end);
+        Set<Pair<String, LocalDateTime>> candidatePairs = predictions.stream()
+                .map(p -> Pair.of(p.getDerId(), p.getDateTime()))
+                .collect(Collectors.toSet());
     }
 
     @Override
