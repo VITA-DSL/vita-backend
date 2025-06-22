@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ExceptionController {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage() + "\n" + e.getCause());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
