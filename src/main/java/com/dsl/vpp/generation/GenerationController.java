@@ -46,9 +46,17 @@ public class GenerationController {
         GenerationGetListResponseDto responseDto = GenerationMapper.mapToDto(generationInfos);
         return ResponseEntity.ok(responseDto);
     }
-
-
     @GetMapping("/vpps/{vppId}/generations")
+    public ResponseEntity<GenerationGetListResponseDto> getGenerationListByVppBetween(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
+    ) {
+        List<GenerationInfo> generationInfos = generationService.readByVppIdBetween(vppId, start, end);
+        GenerationGetListResponseDto responseDto = GenerationMapper.mapToDto(generationInfos);
+        return ResponseEntity.ok(responseDto);
+    }
+    @GetMapping("/vpps/{vppId}/generations/daily")
     public ResponseEntity<GenerationGetDailyListResponseDto> getDailyGenerationListByVppBetween(
             @PathVariable String vppId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
