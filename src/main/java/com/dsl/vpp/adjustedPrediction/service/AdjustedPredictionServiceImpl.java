@@ -39,6 +39,7 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
         PredictionInfo prediction = predictionService.readById(predictionId);
 
         AdjustedPredictionInfo adjustedPrediction = AdjustedPredictionInfo.builder()
+                .id(prediction.getId())
                 .derId(prediction.getDerId())
                 .amount(adjustmentService.adjust(prediction))
                 .dateTime(prediction.getDateTime())
