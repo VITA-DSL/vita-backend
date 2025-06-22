@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -67,16 +66,7 @@ public class PredictionServiceImpl implements PredictionService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return predictionRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
-                .stream()
-                .collect(Collectors.groupingBy(
-                        g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
-                        Collectors.summingDouble(PredictionEntity::getAmount) // 날짜 단위 발전량 합계
-                ))
-                .entrySet()
-                .stream()
-                .map(PredictionMapper::mapToValue)
-                .toList();
+        return predictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
     }
 
     @Override

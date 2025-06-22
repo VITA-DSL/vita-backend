@@ -1,5 +1,7 @@
 package com.dsl.vpp.prediction;
 
+import com.dsl.vpp.generation.value.DailyGenerationInfo;
+import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,15 @@ public interface PredictionRepository extends JpaRepository<PredictionEntity, St
 
     @Query(value = "SELECT * FROM prediction WHERE MONTH(date_time) = :month", nativeQuery = true)
     List<PredictionEntity> findByMonth(@Param("month") int month);
+
+    @Query(value = """
+            SELECT SUM(amount) AS totalAmount, DATE(date_time) AS date
+            FROM prediction
+            WHERE der_id IN (:derIds)
+            AND date_time BETWEEN (:start) AND (:end)
+            GROUP BY DATE(date_time)
+            ORDER BY DATE(date_time)
+            """,
+            nativeQuery = true)
+    List<DailyPredictionInfo> findDailyByDerIdInAndDateTimeBetween(@Param("derIds") List<String> derIds, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
