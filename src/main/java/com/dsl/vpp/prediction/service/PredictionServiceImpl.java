@@ -67,7 +67,7 @@ public class PredictionServiceImpl implements PredictionService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return predictionRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.plusDays(1).atStartOfDay())
+        return predictionRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
                 .stream()
                 .collect(Collectors.groupingBy(
                         g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화

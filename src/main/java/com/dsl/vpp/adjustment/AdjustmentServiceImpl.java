@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.lang.Math.min;
+import static java.lang.Math.pow;
+
 @RequiredArgsConstructor
 @Service
 public class AdjustmentServiceImpl implements AdjustmentService {
@@ -25,13 +28,12 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         double power = prediction.getAmount();
 
         List<Double> trustRates = weightService.getTrustRatesByWindowSize(derId, timestamp, WINDOW_SIZE);
-
-        double decayFactor = DECAY_FACTOR;
-        for(int i=0;i<WINDOW_SIZE;i++) {
-            numerator += decayFactor * trustRates.get(WINDOW_SIZE-i-1) * power;
+        double decayFactor = pow(DECAY_FACTOR, trustRates.size());
+        for (Double trustRate : trustRates) { // 과거 -> 현재
+            numerator += decayFactor * trustRate * power;
             denominator += decayFactor;
 
-            decayFactor *= DECAY_FACTOR;
+            decayFactor /= DECAY_FACTOR;
         }
         return numerator / denominator;
     }

@@ -66,7 +66,7 @@ public class GenerationServiceImpl implements GenerationService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.plusDays(1).atStartOfDay())
+        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
                 .stream()
                 .collect(Collectors.groupingBy(
                         g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
