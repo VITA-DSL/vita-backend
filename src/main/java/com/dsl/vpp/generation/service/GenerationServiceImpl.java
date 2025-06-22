@@ -62,6 +62,17 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
+    public List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+        List<String> derIds = derService.readByVppId(vppId).stream()
+                .map(DerInfo::getId)
+                .toList();
+
+        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start, end).stream()
+                .map(GenerationMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
     public List<DailyGenerationInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
         List<String> derIds = derService.readByVppId(vppId).stream()
                 .map(DerInfo::getId)
