@@ -26,8 +26,12 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
     private final DerService derService;
 
     @Override
-    public void generateAdjustedPredictionsByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
-        List<PredictionInfo> predictions = predictionService.readByDerIdBetween(derId, LocalDateTime.MIN, LocalDateTime.MAX);
+    public void generateAdjustedPredictionsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+        predictionService.readByVppIdBetween(vppId, start, end)
+                .forEach(prediction -> {
+                    if (!adjustedPredictionRepository.existsByDerIdAndDateTime(prediction.getDerId(), prediction.getDateTime())) {
+                        generateAdjustedPrediction(prediction.getId());
+                    }});
     }
 
     @Override
@@ -45,6 +49,7 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
 
     private void saveAdjustedPrediction(AdjustedPredictionInfo adjustedPrediction) {
         AdjustedPredictionEntity adjustedPredictionEntity = AdjustedPredictionMapper.mapToEntity(adjustedPrediction);
+
         adjustedPredictionRepository.save(adjustedPredictionEntity);
     }
 

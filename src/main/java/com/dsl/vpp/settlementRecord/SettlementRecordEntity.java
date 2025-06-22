@@ -1,5 +1,7 @@
-package com.dsl.vpp.settlementAmount;
+package com.dsl.vpp.settlementRecord;
 
+import com.dsl.vpp.settlementRecord.value.SettlementAmountInfo;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -16,13 +18,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Builder
-public class SettlementAmountEntity {
+public class SettlementRecordEntity {
     @Id
     String id;
-    String generationId;
-    Double unitPrice;
-    Integer amount;
-    LocalDateTime settledAt;
+    @Embedded
+    SettlementAmountInfo adjusted;
+    @Embedded
+    SettlementAmountInfo original;
+    LocalDateTime dateTime;
 
     @PrePersist
     public void assignId() {

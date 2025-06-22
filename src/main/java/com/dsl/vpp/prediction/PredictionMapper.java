@@ -1,12 +1,17 @@
 package com.dsl.vpp.prediction;
 
+import com.dsl.vpp.prediction.dto.response.DailyPredictionGetListResponseDto;
+import com.dsl.vpp.prediction.dto.response.DailyPredictionGetResponseDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetListResponseDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetResponseDto;
 import com.dsl.vpp.prediction.dto.request.PredictionPostRequestDto;
+import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PredictionMapper {
@@ -52,6 +57,30 @@ public class PredictionMapper {
 
         return PredictionGetListResponseDto.builder()
                 .predictions(predictions)
+                .build();
+    }
+
+    public static DailyPredictionInfo mapToValue(Map.Entry<LocalDate, Double> entry) {
+        return DailyPredictionInfo.builder()
+                .date(entry.getKey())
+                .totalAmount(entry.getValue())
+                .build();
+    }
+
+    public static DailyPredictionGetResponseDto mapToDto(DailyPredictionInfo dailyPredictionInfo) {
+        return DailyPredictionGetResponseDto.builder()
+                .date(dailyPredictionInfo.getDate())
+                .totalAmount(dailyPredictionInfo.getTotalAmount())
+                .build();
+    }
+
+    public static DailyPredictionGetListResponseDto mapDailyPredictionToDto(List<DailyPredictionInfo> dailyPredictions) {
+        List<DailyPredictionGetResponseDto> dailyPredictionDtos = dailyPredictions.stream()
+                .map(PredictionMapper::mapToDto)
+                .toList();
+
+        return DailyPredictionGetListResponseDto.builder()
+                .predictions(dailyPredictionDtos)
                 .build();
     }
 }

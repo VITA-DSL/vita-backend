@@ -5,6 +5,7 @@ import com.dsl.vpp.der.value.DerInfo;
 import com.dsl.vpp.prediction.PredictionEntity;
 import com.dsl.vpp.prediction.PredictionMapper;
 import com.dsl.vpp.prediction.PredictionRepository;
+import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -60,6 +62,24 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
     @Override
+    public List<DailyPredictionInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
+        List<String> derIds = derService.readByVppId(vppId).stream()
+                .map(DerInfo::getId)
+                .toList();
+
+        return predictionRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.plusDays(1).atStartOfDay())
+                .stream()
+                .collect(Collectors.groupingBy(
+                        g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
+                        Collectors.summingDouble(PredictionEntity::getAmount) // 날짜 단위 발전량 합계
+                ))
+                .entrySet()
+                .stream()
+                .map(PredictionMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
     public void validateIdExists(String id) {
         if(!predictionRepository.existsById(id)) {
             throw new NoSuchElementException("존재하지 않는 예측 데이터입니다.");
@@ -72,6 +92,4 @@ public class PredictionServiceImpl implements PredictionService {
             throw new IllegalArgumentException("예측 시간은 1시간 단위여야 합니다. 분, 초 단위가 존재해선 안됩니다.");
         }
     }
-
-
 }

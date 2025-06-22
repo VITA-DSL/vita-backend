@@ -1,9 +1,9 @@
 package com.dsl.vpp.settlement.service;
 
-import com.dsl.vpp.settlementAmount.value.SettlementAmountInfo;
+import java.time.LocalDateTime;
 
 public interface SettlementService {
-    SettlementAmountInfo simulateWithOriginalPrediction(String generationId);
     String settle(String generationId);
-    Double calculateUnitPrice(Double generationAmount, Double errorRate);
+    void settleByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
+    Double calculateUnitPrice(Double observation, Double prediction);
 }

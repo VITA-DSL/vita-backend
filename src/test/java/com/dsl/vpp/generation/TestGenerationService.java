@@ -1,7 +1,5 @@
 package com.dsl.vpp.generation;
 
-import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
-import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionServiceImpl;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.generation.service.GenerationService;
 import com.dsl.vpp.generation.service.GenerationServiceImpl;
@@ -26,10 +24,9 @@ import static org.mockito.Mockito.mock;
 public class TestGenerationService {
     DerService derService = mock(DerService.class);
     PredictionService predictionService = mock(PredictionServiceImpl.class);
-    AdjustedPredictionService adjustedPredictionService = mock(AdjustedPredictionServiceImpl.class);
     GenerationRepository generationRepository = mock(GenerationRepository.class);
     WeightService weightService = mock(WeightService.class);
-    GenerationService generationService = new GenerationServiceImpl(derService, predictionService, adjustedPredictionService, weightService, generationRepository);
+    GenerationService generationService = new GenerationServiceImpl(derService, predictionService, weightService, generationRepository);
 
     @BeforeEach
     void setUp() {

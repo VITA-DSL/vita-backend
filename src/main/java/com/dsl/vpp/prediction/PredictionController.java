@@ -1,9 +1,11 @@
 package com.dsl.vpp.prediction;
 
+import com.dsl.vpp.prediction.dto.response.DailyPredictionGetListResponseDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetListResponseDto;
 import com.dsl.vpp.prediction.dto.request.PredictionPostRequestDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetResponseDto;
 import com.dsl.vpp.prediction.service.PredictionService;
+import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,6 +54,17 @@ public class PredictionController {
     ) {
         List<PredictionInfo> predictionInfoList = predictionService.readByVppIdBetween(vppId, start, end);
         PredictionGetListResponseDto responseDto = PredictionMapper.mapToDto(predictionInfoList);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/vpps/{vppId}/predictions/daily")
+    public ResponseEntity<DailyPredictionGetListResponseDto> getDailyPredictionListByVppBetween(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        List<DailyPredictionInfo> dailyPredictions = predictionService.readDailyByVppIdBetween(vppId, start, end);
+        DailyPredictionGetListResponseDto responseDto = PredictionMapper.mapDailyPredictionToDto(dailyPredictions);
         return ResponseEntity.ok(responseDto);
     }
 }

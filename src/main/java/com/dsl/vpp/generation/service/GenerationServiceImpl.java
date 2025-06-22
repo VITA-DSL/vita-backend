@@ -1,6 +1,5 @@
 package com.dsl.vpp.generation.service;
 
-import com.dsl.vpp.adjustedPrediction.service.AdjustedPredictionService;
 import com.dsl.vpp.der.service.DerService;
 import com.dsl.vpp.der.value.DerInfo;
 import com.dsl.vpp.generation.GenerationEntity;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class GenerationServiceImpl implements GenerationService {
     private final DerService derService;
     private final PredictionService predictionService;
-    private final AdjustedPredictionService adjustedPredictionService;
     private final WeightService weightService;
 
     private final GenerationRepository generationRepository;
@@ -78,7 +76,7 @@ public class GenerationServiceImpl implements GenerationService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+        return generationRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.plusDays(1).atStartOfDay())
                 .stream()
                 .collect(Collectors.groupingBy(
                         g -> g.getDateTime().toLocalDate(), // 날짜 단위 그룹화
@@ -88,26 +86,6 @@ public class GenerationServiceImpl implements GenerationService {
                 .stream()
                 .map(GenerationMapper::mapToValue)
                 .toList();
-    }
-
-    @Override
-    public Double calculateOriginalErrorRate(String generationId) {
-        GenerationInfo generationInfo = this.readById(generationId);
-        Double generatedAmount = generationInfo.getAmount();
-        Double predictedAmount = predictionService.readById(generationInfo.getPredictionId()).getAmount();
-        return calculateErrorRate(generatedAmount, predictedAmount);
-    }
-
-    @Override
-    public Double calculateAdjustedErrorRate(String generationId) {
-        GenerationInfo generationInfo = this.readById(generationId);
-        Double generatedAmount = generationInfo.getAmount();
-        Double predictedAmount = adjustedPredictionService.readById(generationInfo.getPredictionId()).getAmount();
-        return calculateErrorRate(generatedAmount, predictedAmount);
-    }
-
-    private Double calculateErrorRate(Double generatedAmount, Double predictedAmount) {
-        return ((generatedAmount - predictedAmount) / generatedAmount) * 100.0;
     }
 
     private List<GenerationInfo> readByPredictions(List<PredictionInfo> predictions) {

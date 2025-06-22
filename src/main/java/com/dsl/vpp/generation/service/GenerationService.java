@@ -14,7 +14,4 @@ public interface GenerationService {
     List<GenerationInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<GenerationInfo> readByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end);
     List<DailyGenerationInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end);
-
-    Double calculateOriginalErrorRate(String generationId);
-    Double calculateAdjustedErrorRate(String generationId);
 }

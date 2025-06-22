@@ -17,13 +17,13 @@ import java.util.List;
 public class AdjustedPredictionController {
     private final AdjustedPredictionService adjustedPredictionService;
 
-    @PostMapping("ders/{derId}/adjusted-predictions")
-    public ResponseEntity<Void> generateAdjustedPredictionsByDerIdBetween(
-            @PathVariable String derId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end
+    @PostMapping("vpps/{vppId}/adjusted-predictions")
+    public ResponseEntity<Void> generateAdjustedPredictionsByVppIdBetween(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
     ) {
-        adjustedPredictionService.generateAdjustedPredictionsByDerIdBetween(derId, start, end);
+        adjustedPredictionService.generateAdjustedPredictionsByVppIdBetween(vppId, start, end);
         return ResponseEntity.ok().build();
     }
 

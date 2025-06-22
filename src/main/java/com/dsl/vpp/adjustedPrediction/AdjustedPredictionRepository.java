@@ -10,4 +10,6 @@ import java.util.List;
 public interface AdjustedPredictionRepository extends JpaRepository<com.dsl.vpp.adjustedPrediction.AdjustedPredictionEntity, String> {
     List<AdjustedPredictionEntity> findByDerIdAndDateTimeBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<AdjustedPredictionEntity> findByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
+
+    boolean existsByDerIdAndDateTime(String derId, LocalDateTime dateTime);
 }
