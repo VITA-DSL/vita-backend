@@ -7,6 +7,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public class ExceptionController {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage() + "\n" + e.getCause());
+        return ResponseEntity.badRequest().body(e.getMessage() + "\n" + e.getCause() + "\n" + Arrays.toString(e.getStackTrace()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
