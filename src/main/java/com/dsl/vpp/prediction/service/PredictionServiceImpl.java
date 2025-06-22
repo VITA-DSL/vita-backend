@@ -36,6 +36,14 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
     @Override
+    public List<PredictionInfo> readByIds(List<String> predictionIds) {
+        return predictionRepository.findAllById(predictionIds)
+                .stream()
+                .map(PredictionMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
     public List<PredictionInfo> readByDerIdBetween(String derId, LocalDateTime start, LocalDateTime end) {
         return predictionRepository.findByDerIdAndDateTimeBetween(derId, start, end).stream()
                 .map(PredictionMapper::mapToValue)

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
@@ -36,13 +38,26 @@ public class WeightServiceImpl implements WeightService {
 
     @Override
     public void generateWeightsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
-        generationService.readByVppIdBetween(vppId, start, end)
-                .forEach(generation -> {
-                    try {
-                        generateWeight(generation.getId());
-                    } catch (RuntimeException ignored) {
-                    }
-                });
+        List<GenerationInfo> generations = generationService.readByVppIdBetween(vppId, start, end);
+        List<String> predictionIds = generations.stream()
+                .map(GenerationInfo::getPredictionId)
+                .distinct()
+                .toList();
+
+        List<PredictionInfo> predictions = predictionService.readByIds(predictionIds);
+
+        Map<String, PredictionInfo> predictionMap = predictions.stream()
+                .collect(Collectors.toMap(PredictionInfo::getId, p -> p));
+
+        for (GenerationInfo generation : generations) {
+            PredictionInfo prediction = predictionMap.get(generation.getPredictionId());
+
+            if (prediction != null) {
+                double trustRate = calculateTrustRate(prediction.getAmount(), generation.getAmount());
+                WeightEntity weight = WeightMapper.mapToEntity(generation, trustRate);
+                weightRepository.save(weight);
+            }
+        }
     }
 
     @Override
