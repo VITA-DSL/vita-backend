@@ -5,12 +5,16 @@ import com.dsl.vpp.der.value.DerInfo;
 import com.dsl.vpp.settlementRecord.SettlementRecordEntity;
 import com.dsl.vpp.settlementRecord.SettlementRecordMapper;
 import com.dsl.vpp.settlementRecord.SettlementRecordRepository;
+import com.dsl.vpp.settlementRecord.value.DailySettlementRecordInfo;
 import com.dsl.vpp.settlementRecord.value.SettlementRecordInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -47,6 +51,39 @@ public class SettlementRecordServiceImpl implements SettlementRecordService {
                 .toList();
 
         return settlementRecordRepository.findByDerIdInAndDateTimeBetween(derIds, start, end)
+                .stream()
+                .map(SettlementRecordMapper::mapToValue)
+                .toList();
+    }
+
+    @Override
+    public List<DailySettlementRecordInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
+        List<String> derIds = derService.readByVppId(vppId)
+                .stream()
+                .map(DerInfo::getId)
+                .toList();
+
+        return settlementRecordRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
+                .collect(Collectors.groupingBy(
+                        s -> s.getDateTime().toLocalDate(), // 날짜 단위 + original/adjusted 그룹화
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                groupedList -> {
+                                    Integer originalSum = groupedList.stream()
+                                            .mapToInt(r -> r.getOriginal().getAmount())
+                                            .sum();
+                                    Integer adjustedSum = groupedList.stream()
+                                            .mapToInt(r -> r.getAdjusted().getAmount())
+                                            .sum();
+                                    return Map.of(
+                                            "original", originalSum,
+                                            "adjusted", adjustedSum
+                                    );
+                                }
+                        )
+                ))
+                .entrySet()
                 .stream()
                 .map(SettlementRecordMapper::mapToValue)
                 .toList();

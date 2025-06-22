@@ -1,8 +1,10 @@
 package com.dsl.vpp.settlementRecord;
 
+import com.dsl.vpp.settlementRecord.dto.DailySettlementRecordGetListResponseDto;
 import com.dsl.vpp.settlementRecord.dto.SettlementGetListResponseDto;
 import com.dsl.vpp.settlementRecord.dto.SettlementGetResponseDto;
 import com.dsl.vpp.settlementRecord.service.SettlementRecordService;
+import com.dsl.vpp.settlementRecord.value.DailySettlementRecordInfo;
 import com.dsl.vpp.settlementRecord.value.SettlementRecordInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,6 +49,17 @@ public class SettlementRecordController {
     ) {
         List<SettlementRecordInfo> settlementRecordInfoList = settlementRecordService.readByVppIdBetween(vppId, start, end);
         SettlementGetListResponseDto responseDto = SettlementRecordMapper.mapToDto(settlementRecordInfoList);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/vpps/{vppId}/settlements/daily")
+    public ResponseEntity<DailySettlementRecordGetListResponseDto> getByVpp(
+            @PathVariable String vppId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        List<DailySettlementRecordInfo> dailySettlements = settlementRecordService.readDailyByVppIdBetween(vppId, start, end);
+        DailySettlementRecordGetListResponseDto responseDto = SettlementRecordMapper.mapToDailySettlementListDto(dailySettlements);
         return ResponseEntity.ok().body(responseDto);
     }
 }

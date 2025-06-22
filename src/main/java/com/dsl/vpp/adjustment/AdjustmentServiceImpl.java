@@ -35,6 +35,9 @@ public class AdjustmentServiceImpl implements AdjustmentService {
 
             decayFactor /= DECAY_FACTOR;
         }
+        if(denominator == 0) {
+            return power;
+        }
         return numerator / denominator;
     }
 }
