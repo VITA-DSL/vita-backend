@@ -1,10 +1,7 @@
 package com.dsl.vpp.settlementRecord;
 
 import com.dsl.vpp.settlementRecord.value.SettlementAmountInfo;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +18,20 @@ import java.util.UUID;
 public class SettlementRecordEntity {
     @Id
     String id;
+    String derId;
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "unitPrice", column = @Column(name = "adjusted_unit_price")),
+            @AttributeOverride(name = "power", column = @Column(name = "adjusted_power")),
+            @AttributeOverride(name = "amount", column = @Column(name = "adjusted_amount"))
+    })
     SettlementAmountInfo adjusted;
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "unitPrice", column = @Column(name = "original_unit_price")),
+            @AttributeOverride(name = "power", column = @Column(name = "original_power")),
+            @AttributeOverride(name = "amount", column = @Column(name = "original_amount"))
+    })
     SettlementAmountInfo original;
     LocalDateTime dateTime;
 

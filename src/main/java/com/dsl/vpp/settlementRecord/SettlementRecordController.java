@@ -27,15 +27,7 @@ public class SettlementRecordController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @GetMapping("/generations/{generationId}/settlement-amounts")
-    public ResponseEntity<SettlementGetResponseDto> getByGeneration(@PathVariable String generationId) {
-        SettlementRecordInfo settlementRecordInfo = settlementRecordService.readByGenerationId(generationId);
-        SettlementGetResponseDto responseDto = SettlementRecordMapper.mapToDto(settlementRecordInfo);
-        return ResponseEntity.ok().body(responseDto);
-    }
-
-
-    @GetMapping("/ders/{derId}/settlement-amounts")
+    @GetMapping("/ders/{derId}/settlements")
     public ResponseEntity<SettlementGetListResponseDto> getByDer(
             @PathVariable String derId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -46,7 +38,7 @@ public class SettlementRecordController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @GetMapping("/vpps/{vppId}/settlement-amounts")
+    @GetMapping("/vpps/{vppId}/settlements")
     public ResponseEntity<SettlementGetListResponseDto> getByVpp(
             @PathVariable String vppId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
