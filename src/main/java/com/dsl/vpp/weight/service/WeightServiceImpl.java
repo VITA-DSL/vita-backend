@@ -1,6 +1,8 @@
 package com.dsl.vpp.weight.service;
 
+import com.dsl.vpp.generation.service.GenerationService;
 import com.dsl.vpp.generation.value.GenerationInfo;
+import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import com.dsl.vpp.weight.WeightEntity;
 import com.dsl.vpp.weight.WeightMapper;
@@ -17,13 +19,34 @@ import static java.lang.Math.min;
 @RequiredArgsConstructor
 @Service
 public class WeightServiceImpl implements WeightService {
+    private final PredictionService predictionService;
+    private final GenerationService generationService;
     private final WeightRepository weightRepository;
 
     @Override
-    public void updateWeight(PredictionInfo predictionInfo, GenerationInfo generationInfo) {
-        Double trustRate = calculateTrustRate(predictionInfo.getAmount(), generationInfo.getAmount());
-        WeightEntity weightEntity = WeightMapper.mapToEntity(predictionInfo, trustRate);
+    public void generateWeight(String generationId) {
+        GenerationInfo generation = generationService.readById(generationId);
+        PredictionInfo prediction = predictionService.readById(generation.getPredictionId());
+
+        Double trustRate = calculateTrustRate(prediction.getAmount(), generation.getAmount());
+
+        WeightEntity weightEntity = WeightMapper.mapToEntity(generation, trustRate);
         weightRepository.save(weightEntity);
+    }
+
+    @Override
+    public void generateWeightsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
+        generationService.readByVppIdBetween(vppId, start, end)
+                .forEach(generation ->
+                        generateWeight(generation.getId())
+                );
+    }
+
+    @Override
+    public List<Double> getTrustRatesByWindowSize(String derId, LocalDateTime timestamp, Integer windowSize) {
+        return weightRepository.findWeightsBeforeDateTime(derId, timestamp, windowSize).stream()
+                .map(WeightEntity::getTrustRate)
+                .toList();
     }
 
     @Override
@@ -37,12 +60,5 @@ public class WeightServiceImpl implements WeightService {
 
     private Double calculateAbsoluteRelativeError(Double prediction, Double observation) {
         return abs((prediction - observation) / observation);
-    }
-
-    @Override
-    public List<Double> getTrustRatesByWindowSize(String derId, LocalDateTime timestamp, Integer windowSize) {
-        return weightRepository.findWeightsBeforeDateTime(derId, timestamp, windowSize).stream()
-                .map(WeightEntity::getTrustRate)
-                .toList();
     }
 }

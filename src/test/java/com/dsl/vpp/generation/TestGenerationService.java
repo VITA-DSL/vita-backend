@@ -26,7 +26,7 @@ public class TestGenerationService {
     PredictionService predictionService = mock(PredictionServiceImpl.class);
     GenerationRepository generationRepository = mock(GenerationRepository.class);
     WeightService weightService = mock(WeightService.class);
-    GenerationService generationService = new GenerationServiceImpl(derService, predictionService, weightService, generationRepository);
+    GenerationService generationService = new GenerationServiceImpl(derService, generationRepository);
 
     @BeforeEach
     void setUp() {

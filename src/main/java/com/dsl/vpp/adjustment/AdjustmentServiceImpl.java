@@ -27,8 +27,8 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         List<Double> trustRates = weightService.getTrustRatesByWindowSize(derId, timestamp, WINDOW_SIZE);
 
         double decayFactor = DECAY_FACTOR;
-        for(int i=WINDOW_SIZE-1;i>=0;i--) {
-            numerator += decayFactor * trustRates.get(i) * power;
+        for(int i=0;i<WINDOW_SIZE;i++) {
+            numerator += decayFactor * trustRates.get(WINDOW_SIZE-i-1) * power;
             denominator += decayFactor;
 
             decayFactor *= DECAY_FACTOR;

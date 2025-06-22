@@ -7,9 +7,6 @@ import com.dsl.vpp.generation.GenerationMapper;
 import com.dsl.vpp.generation.GenerationRepository;
 import com.dsl.vpp.generation.value.DailyGenerationInfo;
 import com.dsl.vpp.generation.value.GenerationInfo;
-import com.dsl.vpp.prediction.service.PredictionService;
-import com.dsl.vpp.prediction.value.PredictionInfo;
-import com.dsl.vpp.weight.service.WeightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class GenerationServiceImpl implements GenerationService {
     private final DerService derService;
-    private final PredictionService predictionService;
-    private final WeightService weightService;
-
     private final GenerationRepository generationRepository;
 
     @Override
     public String create(GenerationInfo generationInfo) {
-        PredictionInfo predictionInfo = predictionService.readById(generationInfo.getPredictionId());
-
-        weightService.updateWeight(predictionInfo, generationInfo);
-
         GenerationEntity generationEntity = GenerationMapper.mapToEntity(generationInfo);
         return generationRepository.save(generationEntity).getId();
     }
@@ -84,16 +74,6 @@ public class GenerationServiceImpl implements GenerationService {
                 ))
                 .entrySet()
                 .stream()
-                .map(GenerationMapper::mapToValue)
-                .toList();
-    }
-
-    private List<GenerationInfo> readByPredictions(List<PredictionInfo> predictions) {
-        List<String> predictionIdList = predictions.stream()
-                .map(PredictionInfo::getId)
-                .toList();
-
-        return generationRepository.findByPredictionIdIn(predictionIdList).stream()
                 .map(GenerationMapper::mapToValue)
                 .toList();
     }
