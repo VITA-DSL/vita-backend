@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface GenerationRepository extends JpaRepository<GenerationEntity, String> {
     Optional<GenerationEntity> findByPredictionId(String predictionId);
-    List<GenerationEntity> findByPredictionIdIn(List<String> predictionId);
-
     List<GenerationEntity> findByDerIdAndDateTimeBetween(String derId, LocalDateTime start, LocalDateTime end);
     List<GenerationEntity> findByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
 }

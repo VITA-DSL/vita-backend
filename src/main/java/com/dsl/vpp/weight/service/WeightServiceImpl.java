@@ -37,9 +37,12 @@ public class WeightServiceImpl implements WeightService {
     @Override
     public void generateWeightsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         generationService.readByVppIdBetween(vppId, start, end)
-                .forEach(generation ->
-                        generateWeight(generation.getId())
-                );
+                .forEach(generation -> {
+                    try {
+                        generateWeight(generation.getId());
+                    } catch (RuntimeException ignored) {
+                    }
+                });
     }
 
     @Override
