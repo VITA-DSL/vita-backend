@@ -1,6 +1,6 @@
 package com.dsl.vpp.prediction;
 
-import com.dsl.vpp.generation.value.DailyGenerationInfo;
+import com.dsl.vpp.prediction.value.DailyPredictionForRepo;
 import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +27,5 @@ public interface PredictionRepository extends JpaRepository<PredictionEntity, St
             ORDER BY DATE(date_time)
             """,
             nativeQuery = true)
-    List<DailyPredictionInfo> findDailyByDerIdInAndDateTimeBetween(@Param("derIds") List<String> derIds, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    List<DailyPredictionForRepo> findDailyByDerIdInAndDateTimeBetween(@Param("derIds") List<String> derIds, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

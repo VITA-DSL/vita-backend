@@ -74,7 +74,9 @@ public class PredictionServiceImpl implements PredictionService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return predictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
+        return predictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59)).stream()
+                .map(PredictionMapper::mapToValue)
+                .toList();
     }
 
     @Override

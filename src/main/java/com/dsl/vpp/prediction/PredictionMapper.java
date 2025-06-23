@@ -5,6 +5,7 @@ import com.dsl.vpp.prediction.dto.response.DailyPredictionGetResponseDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetListResponseDto;
 import com.dsl.vpp.prediction.dto.response.PredictionGetResponseDto;
 import com.dsl.vpp.prediction.dto.request.PredictionPostRequestDto;
+import com.dsl.vpp.prediction.value.DailyPredictionForRepo;
 import com.dsl.vpp.prediction.value.DailyPredictionInfo;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 
@@ -64,6 +65,13 @@ public class PredictionMapper {
         return DailyPredictionInfo.builder()
                 .date(entry.getKey())
                 .totalAmount(entry.getValue())
+                .build();
+    }
+
+    public static DailyPredictionInfo mapToValue(DailyPredictionForRepo dailyPredictionForRepo) {
+        return DailyPredictionInfo.builder()
+                .totalAmount(dailyPredictionForRepo.getTotalAmount())
+                .date(dailyPredictionForRepo.getDate())
                 .build();
     }
 
