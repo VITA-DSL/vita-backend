@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class SettlementRecordInfo {
     String id;
+    String derId;
     SettlementAmountInfo original;
     SettlementAmountInfo adjusted;
     LocalDateTime dateTime;

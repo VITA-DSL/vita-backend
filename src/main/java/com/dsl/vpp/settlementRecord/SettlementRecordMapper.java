@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class SettlementRecordMapper {
     public static SettlementRecordEntity mapToEntity(SettlementRecordInfo settlement) {
         return SettlementRecordEntity.builder()
+                .derId(settlement.getDerId())
                 .original(settlement.getOriginal())
                 .adjusted(settlement.getAdjusted())
                 .dateTime(settlement.getDateTime())
@@ -24,6 +25,7 @@ public class SettlementRecordMapper {
     public static SettlementRecordInfo mapToValue(SettlementRecordEntity settlement) {
         return SettlementRecordInfo.builder()
                 .id(settlement.getId())
+                .derId(settlement.getDerId())
                 .original(settlement.getOriginal())
                 .adjusted(settlement.getAdjusted())
                 .dateTime(settlement.getDateTime())
