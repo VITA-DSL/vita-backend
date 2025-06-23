@@ -6,12 +6,9 @@ import com.dsl.vpp.generation.service.GenerationService;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
-import com.dsl.vpp.settlementRecord.SettlementRecordMapper;
 import com.dsl.vpp.settlementRecord.service.SettlementRecordService;
 import com.dsl.vpp.settlementRecord.value.SettlementRecordInfo;
 import com.dsl.vpp.settlementRecord.value.SettlementAmountInfo;
-import com.dsl.vpp.weight.WeightEntity;
-import com.dsl.vpp.weight.WeightMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +68,8 @@ public class SettlementServiceImpl implements SettlementService {
             if (prediction != null && adjustedPrediction != null) {
                 SettlementAmountInfo original = createSettlementAmount(generation.getAmount(), prediction.getAmount());
                 SettlementAmountInfo adjusted = createSettlementAmount(generation.getAmount(), adjustedPrediction.getAmount());
-                settlementRecordService.create(SettlementRecordInfo.builder()
+                settlementRecordService.create(
+                        SettlementRecordInfo.builder()
                         .original(original)
                         .adjusted(adjusted)
                         .dateTime(generation.getDateTime())
