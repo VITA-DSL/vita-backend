@@ -63,7 +63,12 @@ public class SettlementRecordServiceImpl implements SettlementRecordService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return settlementRecordRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+        return settlementRecordRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
+                .map(SettlementRecordMapper::mapToValue)
+                .toList();
+
+        /*settlementRecordRepository.findByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
                 .stream()
                 .collect(Collectors.groupingBy(
                         s -> s.getDateTime().toLocalDate(), // 날짜 단위 + original/adjusted 그룹화
@@ -86,6 +91,6 @@ public class SettlementRecordServiceImpl implements SettlementRecordService {
                 .entrySet()
                 .stream()
                 .map(SettlementRecordMapper::mapToValue)
-                .toList();
+                .toList();*/
     }
 }

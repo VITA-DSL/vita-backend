@@ -4,6 +4,7 @@ import com.dsl.vpp.settlementRecord.dto.DailySettlementRecordGetListResponseDto;
 import com.dsl.vpp.settlementRecord.dto.DailySettlementRecordGetResponseDto;
 import com.dsl.vpp.settlementRecord.dto.SettlementGetListResponseDto;
 import com.dsl.vpp.settlementRecord.dto.SettlementGetResponseDto;
+import com.dsl.vpp.settlementRecord.value.DailySettlementRecordForRepo;
 import com.dsl.vpp.settlementRecord.value.DailySettlementRecordInfo;
 import com.dsl.vpp.settlementRecord.value.SettlementRecordInfo;
 
@@ -72,6 +73,14 @@ public class SettlementRecordMapper {
                 .toList();
         return DailySettlementRecordGetListResponseDto.builder()
                 .settlements(dailySettlementDtos)
+                .build();
+    }
+
+    public static DailySettlementRecordInfo mapToValue(DailySettlementRecordForRepo dailySettlementRecordForRepo) {
+        return DailySettlementRecordInfo.builder()
+                .originalTotalAmount(dailySettlementRecordForRepo.getOriginalTotalAmount())
+                .adjustedTotalAmount(dailySettlementRecordForRepo.getAdjustedTotalAmount())
+                .date(dailySettlementRecordForRepo.getDate())
                 .build();
     }
 }
