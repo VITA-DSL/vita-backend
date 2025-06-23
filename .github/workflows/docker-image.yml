@@ -75,6 +75,7 @@ jobs:
               -e DB_PORT=${{ secrets.DB_PORT }} \
               -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              --network vita-network \
               --name vita-backend \
               -p 8000:8000 \
               ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
