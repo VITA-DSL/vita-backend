@@ -1,6 +1,7 @@
 package com.dsl.vpp.adjustedPrediction;
 
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionForRepo;
 import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +34,5 @@ public interface AdjustedPredictionRepository extends JpaRepository<com.dsl.vpp.
             ORDER BY DATE(date_time)
             """,
             nativeQuery = true)
-    List<DailyAdjustedPredictionInfo> findDailyByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
+    List<DailyAdjustedPredictionForRepo> findDailyByDerIdInAndDateTimeBetween(List<String> derIds, LocalDateTime start, LocalDateTime end);
 }

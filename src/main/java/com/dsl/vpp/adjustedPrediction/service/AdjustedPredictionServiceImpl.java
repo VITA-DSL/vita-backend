@@ -94,6 +94,9 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
                 .map(DerInfo::getId)
                 .toList();
 
-        return adjustedPredictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
+        return adjustedPredictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
+                .map(AdjustedPredictionMapper::mapToValue)
+                .toList();
     }
 }

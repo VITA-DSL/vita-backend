@@ -6,10 +6,8 @@ import com.dsl.vpp.adjustedPrediction.dto.response.AdjustedPredictionGetResponse
 import com.dsl.vpp.adjustedPrediction.dto.response.DailyAdjustedPredictionGetListResponseDto;
 import com.dsl.vpp.adjustedPrediction.dto.response.DailyAdjustedPredictionGetResponseDto;
 import com.dsl.vpp.adjustedPrediction.value.AdjustedPredictionInfo;
+import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionForRepo;
 import com.dsl.vpp.adjustedPrediction.value.DailyAdjustedPredictionInfo;
-import com.dsl.vpp.prediction.PredictionMapper;
-import com.dsl.vpp.prediction.dto.response.DailyPredictionGetListResponseDto;
-import com.dsl.vpp.prediction.dto.response.DailyPredictionGetResponseDto;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 
 import java.util.ArrayList;
@@ -88,6 +86,13 @@ public class AdjustedPredictionMapper {
         return DailyAdjustedPredictionGetResponseDto.builder()
                 .totalAmount(dailyAdjustedPrediction.getTotalAmount())
                 .date(dailyAdjustedPrediction.getDate())
+                .build();
+    }
+
+    public static DailyAdjustedPredictionInfo mapToValue(DailyAdjustedPredictionForRepo dailyAdjustedPredictionForRepo) {
+        return DailyAdjustedPredictionInfo.builder()
+                .totalAmount(dailyAdjustedPredictionForRepo.getTotalAmount())
+                .date(dailyAdjustedPredictionForRepo.getDate())
                 .build();
     }
 }
