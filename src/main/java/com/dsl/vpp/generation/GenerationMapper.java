@@ -5,6 +5,7 @@ import com.dsl.vpp.generation.dto.response.GenerationGetDailyListResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationGetDailyResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationGetListResponseDto;
 import com.dsl.vpp.generation.dto.response.GenerationGetResponseDto;
+import com.dsl.vpp.generation.value.DailyGenerationForRepo;
 import com.dsl.vpp.generation.value.DailyGenerationInfo;
 import com.dsl.vpp.generation.value.GenerationInfo;
 
@@ -43,6 +44,13 @@ public class GenerationMapper {
         return generations.stream()
                 .map(GenerationMapper::mapToValue)
                 .collect(Collectors.toList());
+    }
+
+    public static DailyGenerationInfo mapToValue(DailyGenerationForRepo dailyGenerationForRepo) {
+        return DailyGenerationInfo.builder()
+                .totalAmount(dailyGenerationForRepo.getTotalAmount())
+                .date(dailyGenerationForRepo.getDate())
+                .build();
     }
 
     public static GenerationEntity mapToEntity(GenerationInfo generation) {

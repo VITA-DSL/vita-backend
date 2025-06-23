@@ -65,6 +65,9 @@ public class GenerationServiceImpl implements GenerationService {
                 .map(DerInfo::getId)
                 .toList();
 
-        return generationRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59));
+        return generationRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
+                .map(GenerationMapper::mapToValue)
+                .toList();
     }
 }

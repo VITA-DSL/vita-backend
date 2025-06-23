@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
 @RequiredArgsConstructor

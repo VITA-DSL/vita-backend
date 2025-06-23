@@ -1,6 +1,6 @@
 package com.dsl.vpp.generation;
 
-import com.dsl.vpp.generation.value.DailyGenerationInfo;
+import com.dsl.vpp.generation.value.DailyGenerationForRepo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,5 +25,5 @@ public interface GenerationRepository extends JpaRepository<GenerationEntity, St
             ORDER BY DATE(date_time)
             """,
             nativeQuery = true)
-    List<DailyGenerationInfo> findDailyByDerIdInAndDateTimeBetween(@Param("derIds") List<String> derIds, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    List<DailyGenerationForRepo> findDailyByDerIdInAndDateTimeBetween(@Param("derIds") List<String> derIds, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
