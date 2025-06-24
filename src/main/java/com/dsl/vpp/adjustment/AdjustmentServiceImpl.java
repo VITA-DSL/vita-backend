@@ -29,7 +29,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
 
         List<Weight> weights = weightService.getWeightsByWindowSize(derId, timestamp, WINDOW_SIZE);
         double decayFactor = 1.0;
-        for (Weight weight : weights) { // 과거 -> 현재
+        for (Weight weight : weights) { // 현재 -> 과거
             numerator += decayFactor * weight.getTrustRate() * weight.getGeneration();
             denominator += decayFactor;
 
