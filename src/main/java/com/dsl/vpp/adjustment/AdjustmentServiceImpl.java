@@ -28,12 +28,12 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         double power = prediction.getAmount();
 
         List<Weight> weights = weightService.getWeightsByWindowSize(derId, timestamp, WINDOW_SIZE);
-        double decayFactor = pow(DECAY_FACTOR, weights.size());
+        double decayFactor = 1.0;
         for (Weight weight : weights) { // 과거 -> 현재
             numerator += decayFactor * weight.getTrustRate() * weight.getGeneration();
             denominator += decayFactor;
 
-            decayFactor /= DECAY_FACTOR;
+            decayFactor *= DECAY_FACTOR;
         }
         if(denominator == 0) {
             return power;
