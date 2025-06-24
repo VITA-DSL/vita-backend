@@ -70,10 +70,11 @@ public class SettlementServiceImpl implements SettlementService {
                 SettlementAmountInfo adjusted = createSettlementAmount(generation.getAmount(), adjustedPrediction.getAmount());
                 settlementRecordService.create(
                         SettlementRecordInfo.builder()
-                        .original(original)
-                        .adjusted(adjusted)
-                        .dateTime(generation.getDateTime())
-                        .build());
+                                .derId(prediction.getDerId())
+                                .original(original)
+                                .adjusted(adjusted)
+                                .dateTime(generation.getDateTime())
+                                .build());
             }
         }
     }
