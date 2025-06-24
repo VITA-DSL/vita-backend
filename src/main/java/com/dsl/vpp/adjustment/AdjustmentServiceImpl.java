@@ -19,7 +19,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
 
     @Override
     public Double adjust(PredictionInfo prediction) {
-        final int WINDOW_SIZE = 72;
+        final int WINDOW_SIZE = 96;
         final double DECAY_FACTOR = 0.9;
         double numerator = 0.0;
         double denominator = 0.0;
@@ -31,7 +31,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         List<Weight> weights = weightService.getWeightsByWindowSize(derId, timestamp, WINDOW_SIZE);
         double decayFactor = 1.0;
         for (Weight weight : weights) { // weight = 최근 -> 과거
-            numerator += decayFactor * min(weight.getTrustRate(), 1.5) * weight.getPrediction();
+            numerator += decayFactor * min(weight.getTrustRate(), 1.25) * weight.getPrediction();
             denominator += decayFactor;
 
             decayFactor *= DECAY_FACTOR;
