@@ -8,8 +8,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-  jackson:
-    property-naming-strategy: KEBAB_CASE
 server:
   port: 8000
