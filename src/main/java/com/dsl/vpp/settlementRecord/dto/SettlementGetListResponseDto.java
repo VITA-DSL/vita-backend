@@ -8,5 +8,5 @@ import java.util.ArrayList;
 @Builder
 @Data
 public class SettlementGetListResponseDto {
-    ArrayList<SettlementGetResponseDto> settlementAmounts;
+    ArrayList<SettlementGetResponseDto> settlements;
 }
