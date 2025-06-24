@@ -7,6 +7,7 @@ import com.dsl.vpp.prediction.value.PredictionInfo;
 import com.dsl.vpp.weight.WeightEntity;
 import com.dsl.vpp.weight.WeightMapper;
 import com.dsl.vpp.weight.WeightRepository;
+import com.dsl.vpp.weight.value.Weight;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,9 +65,9 @@ public class WeightServiceImpl implements WeightService {
     }
 
     @Override
-    public List<Double> getTrustRatesByWindowSize(String derId, LocalDateTime timestamp, Integer windowSize) {
+    public List<Weight> getWeightsByWindowSize(String derId, LocalDateTime timestamp, Integer windowSize) {
         return weightRepository.findWeightsBeforeDateTime(derId, timestamp, windowSize).stream()
-                .map(WeightEntity::getTrustRate)
+                .map(WeightMapper::mapToWeight)
                 .toList();
     }
 

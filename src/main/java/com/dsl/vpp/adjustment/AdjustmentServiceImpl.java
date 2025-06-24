@@ -2,6 +2,7 @@ package com.dsl.vpp.adjustment;
 
 import com.dsl.vpp.weight.service.WeightService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
+import com.dsl.vpp.weight.value.Weight;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,10 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         LocalDateTime timestamp = prediction.getDateTime();
         double power = prediction.getAmount();
 
-        List<Double> trustRates = weightService.getTrustRatesByWindowSize(derId, timestamp, WINDOW_SIZE);
-        double decayFactor = pow(DECAY_FACTOR, trustRates.size());
-        for (Double trustRate : trustRates) { // 과거 -> 현재
-            numerator += decayFactor * trustRate * power;
+        List<Weight> weights = weightService.getWeightsByWindowSize(derId, timestamp, WINDOW_SIZE);
+        double decayFactor = pow(DECAY_FACTOR, weights.size());
+        for (Weight weight : weights) { // 과거 -> 현재
+            numerator += decayFactor * weight.getTrustRate() * weight.getGeneration();
             denominator += decayFactor;
 
             decayFactor /= DECAY_FACTOR;
