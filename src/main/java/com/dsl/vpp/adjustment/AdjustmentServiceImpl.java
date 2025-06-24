@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         List<Weight> weights = weightService.getWeightsByWindowSize(derId, timestamp, WINDOW_SIZE);
         double decayFactor = 1.0;
         for (Weight weight : weights) { // 현재 -> 과거
-            numerator += decayFactor * weight.getTrustRate() * weight.getGeneration();
+            numerator += decayFactor * min(weight.getTrustRate(), 3) * weight.getGeneration();
             denominator += decayFactor;
 
             decayFactor *= DECAY_FACTOR;
