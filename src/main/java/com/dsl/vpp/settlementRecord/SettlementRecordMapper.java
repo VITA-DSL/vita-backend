@@ -50,12 +50,12 @@ public class SettlementRecordMapper {
                 .build();
     }
     public static SettlementGetListResponseDto mapToDto(List<SettlementRecordInfo> settlementRecordInfoList) {
-        ArrayList<SettlementGetResponseDto> settlementAmounts = settlementRecordInfoList.stream()
+        ArrayList<SettlementGetResponseDto> settlements = settlementRecordInfoList.stream()
                 .map(SettlementRecordMapper::mapToDto)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         return SettlementGetListResponseDto.builder()
-                .settlementAmounts(settlementAmounts)
+                .settlements(settlements)
                 .build();
     }
 
