@@ -35,7 +35,7 @@ public class WeightServiceImpl implements WeightService {
 
         Double trustRate = calculateTrustRate(prediction.getAmount(), generation.getAmount());
 
-        WeightEntity weightEntity = WeightMapper.mapToEntity(generation, trustRate);
+        WeightEntity weightEntity = WeightMapper.mapToEntity(prediction, trustRate);
         weightRepository.save(weightEntity);
     }
 
@@ -58,7 +58,7 @@ public class WeightServiceImpl implements WeightService {
 
             if (prediction != null) {
                 double trustRate = calculateTrustRate(prediction.getAmount(), generation.getAmount());
-                WeightEntity weight = WeightMapper.mapToEntity(generation, trustRate);
+                WeightEntity weight = WeightMapper.mapToEntity(prediction, trustRate);
                 weightRepository.save(weight);
             }
         }

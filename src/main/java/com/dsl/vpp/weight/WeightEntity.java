@@ -20,7 +20,7 @@ public class WeightEntity {
     @Id
     private String id;
     private String derId;
-    private Double generation;
+    private Double prediction;
     private Double trustRate;
     private LocalDateTime dateTime;
 

@@ -1,6 +1,7 @@
 package com.dsl.vpp.weight;
 
 import com.dsl.vpp.generation.value.GenerationInfo;
+import com.dsl.vpp.prediction.value.PredictionInfo;
 import com.dsl.vpp.weight.value.Weight;
 import com.dsl.vpp.weight.value.WeightInfo;
 
@@ -9,7 +10,7 @@ public class WeightMapper {
         return WeightInfo.builder()
                 .id(weight.getId())
                 .derId(weight.getDerId())
-                .generation(weight.getGeneration())
+                .prediction(weight.getPrediction())
                 .trustRate(weight.getTrustRate())
                 .dateTime(weight.getDateTime())
                 .build();
@@ -17,17 +18,17 @@ public class WeightMapper {
 
     public static Weight mapToWeight(WeightEntity weight) {
         return Weight.builder()
-                .generation(weight.getGeneration())
+                .prediction(weight.getPrediction())
                 .trustRate(weight.getTrustRate())
                 .build();
     }
 
-    public static WeightEntity mapToEntity(GenerationInfo generation, Double trustRate) {
+    public static WeightEntity mapToEntity(PredictionInfo prediction, Double trustRate) {
         return WeightEntity.builder()
-                .derId(generation.getDerId())
-                .generation(generation.getAmount())
+                .derId(prediction.getDerId())
+                .prediction(prediction.getAmount())
                 .trustRate(trustRate)
-                .dateTime(generation.getDateTime())
+                .dateTime(prediction.getDateTime())
                 .build();
     }
 }
