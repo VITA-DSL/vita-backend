@@ -78,8 +78,8 @@ public class SettlementRecordMapper {
 
     public static DailySettlementRecordInfo mapToValue(DailySettlementRecordForRepo dailySettlementRecordForRepo) {
         return DailySettlementRecordInfo.builder()
-                .originalTotalAmount(dailySettlementRecordForRepo.getTotalOriginalAmount())
-                .adjustedTotalAmount(dailySettlementRecordForRepo.getTotalAdjustedAmount())
+                .originalTotalAmount(dailySettlementRecordForRepo.getTotalOriginalAmount().intValue())
+                .adjustedTotalAmount(dailySettlementRecordForRepo.getTotalAdjustedAmount().intValue())
                 .date(dailySettlementRecordForRepo.getDate())
                 .build();
     }
