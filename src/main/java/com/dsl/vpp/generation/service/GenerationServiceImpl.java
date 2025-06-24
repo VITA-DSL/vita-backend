@@ -9,6 +9,7 @@ import com.dsl.vpp.generation.value.DailyGenerationInfo;
 import com.dsl.vpp.generation.value.GenerationInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class GenerationServiceImpl implements GenerationService {
     private final DerService derService;
     private final GenerationRepository generationRepository;
 
+    @Transactional
     @Override
     public String create(GenerationInfo generationInfo) {
         GenerationEntity generationEntity = GenerationMapper.mapToEntity(generationInfo);
@@ -61,7 +63,8 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public List<DailyGenerationInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
-        List<String> derIds = derService.readByVppId(vppId).stream()
+        List<String> derIds = derService.readByVppId(vppId)
+                .stream()
                 .map(DerInfo::getId)
                 .toList();
 

@@ -70,11 +70,13 @@ public class PredictionServiceImpl implements PredictionService {
 
     @Override
     public List<DailyPredictionInfo> readDailyByVppIdBetween(String vppId, LocalDate start, LocalDate end) {
-        List<String> derIds = derService.readByVppId(vppId).stream()
+        List<String> derIds = derService.readByVppId(vppId)
+                .stream()
                 .map(DerInfo::getId)
                 .toList();
 
-        return predictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59)).stream()
+        return predictionRepository.findDailyByDerIdInAndDateTimeBetween(derIds, start.atStartOfDay(), end.atTime(23,59,59))
+                .stream()
                 .map(PredictionMapper::mapToValue)
                 .toList();
     }

@@ -9,6 +9,7 @@ import com.dsl.vpp.weight.WeightMapper;
 import com.dsl.vpp.weight.WeightRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class WeightServiceImpl implements WeightService {
     private final GenerationService generationService;
     private final WeightRepository weightRepository;
 
+    @Transactional
     @Override
     public void generateWeight(String generationId) {
         GenerationInfo generation = generationService.readById(generationId);
@@ -36,6 +38,7 @@ public class WeightServiceImpl implements WeightService {
         weightRepository.save(weightEntity);
     }
 
+    @Transactional
     @Override
     public void generateWeightsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         List<GenerationInfo> generations = generationService.readByVppIdBetween(vppId, start, end);

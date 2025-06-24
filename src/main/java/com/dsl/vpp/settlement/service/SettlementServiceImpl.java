@@ -76,7 +76,6 @@ public class SettlementServiceImpl implements SettlementService {
                         .build());
             }
         }
-
     }
 
     @Override

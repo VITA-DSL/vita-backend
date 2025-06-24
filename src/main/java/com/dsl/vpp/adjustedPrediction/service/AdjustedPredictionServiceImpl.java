@@ -11,6 +11,7 @@ import com.dsl.vpp.prediction.service.PredictionService;
 import com.dsl.vpp.prediction.value.PredictionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,12 +27,14 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
     private final PredictionService predictionService;
     private final DerService derService;
 
+    @Transactional
     @Override
     public void generateAdjustedPredictionsByVppIdBetween(String vppId, LocalDateTime start, LocalDateTime end) {
         predictionService.readByVppIdBetween(vppId, start, end)
                 .forEach(p -> generateAdjustedPrediction(p.getId()));
     }
 
+    @Transactional
     @Override
     public void generateAdjustedPrediction(String predictionId) {
         PredictionInfo prediction = predictionService.readById(predictionId);
@@ -46,6 +49,7 @@ public class AdjustedPredictionServiceImpl implements AdjustedPredictionService 
         saveAdjustedPrediction(adjustedPrediction);
     }
 
+    @Transactional
     private void saveAdjustedPrediction(AdjustedPredictionInfo adjustedPrediction) {
         adjustedPredictionRepository.insertIgnore(
                 adjustedPrediction.getId(),
