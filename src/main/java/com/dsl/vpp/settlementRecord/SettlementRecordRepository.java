@@ -15,7 +15,7 @@ public interface SettlementRecordRepository extends JpaRepository<SettlementReco
     List<SettlementRecordEntity> findByDerIdInAndDateTimeBetween(List<String> derId, LocalDateTime start, LocalDateTime end);
 
     @Query(value = """
-            SELECT SUM(adjusted_amount) AS totalAdjustedAmount, SUM(original_amount) AS totalOriginalAmount, DATE(date_time) AS date
+            SELECT SUM(original_amount) AS totalOriginalAmount, SUM(adjusted_amount) AS totalAdjustedAmount, DATE(date_time) AS date
             FROM settlement_amount
             WHERE der_id IN (:derIds)
             AND date_time BETWEEN (:start) AND (:end)
