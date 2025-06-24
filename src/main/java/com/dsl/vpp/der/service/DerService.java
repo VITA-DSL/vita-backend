@@ -9,6 +9,7 @@ public interface DerService {
     DerInfo readById(String id);
     List<DerInfo> readAll();
     List<DerInfo> readByVppId(String vppId);
+    Integer countByVppId(String vppId);
     void deleteById(String id);
 
     void register(String id, String vppId);

@@ -45,6 +45,11 @@ public class DerServiceImpl implements DerService {
     }
 
     @Override
+    public Integer countByVppId(String vppId) {
+        return derRepository.countByVppId(vppId).intValue();
+    }
+
+    @Override
     public void deleteById(String id) {
         validateIdExists(id);
         derRepository.deleteById(id);

@@ -45,6 +45,11 @@ public class DerController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @GetMapping("/vpps/{vppId}/ders/amount")
+    public ResponseEntity<Integer> getAmountByVppId(@PathVariable String vppId) {
+        return ResponseEntity.ok().body(derService.countByVppId(vppId));
+    }
+
     @DeleteMapping("/ders/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         derService.deleteById(id);

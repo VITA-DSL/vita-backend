@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface DerRepository extends JpaRepository<DerEntity, String> {
     List<DerEntity> findByVppId(String vppId);
+    Long countByVppId(String vppId);
 }
