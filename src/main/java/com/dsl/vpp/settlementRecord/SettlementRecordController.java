@@ -23,7 +23,7 @@ import java.util.List;
 public class SettlementRecordController {
     private final SettlementRecordService settlementRecordService;
 
-    @GetMapping("/settlement-amounts/{id}")
+    @GetMapping("/settlements/{id}")
     public ResponseEntity<SettlementGetResponseDto> get(@PathVariable String id) {
         SettlementRecordInfo settlementRecordInfo = settlementRecordService.readById(id);
         SettlementGetResponseDto responseDto = SettlementRecordMapper.mapToDto(settlementRecordInfo);
